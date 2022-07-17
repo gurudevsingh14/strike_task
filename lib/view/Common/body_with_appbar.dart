@@ -13,12 +13,13 @@ class BodyWithAppBar extends StatelessWidget {
     final controller = Provider.of<ScreenController>(context);
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         appBar: AppBar(
-          leading: Icon(Icons.arrow_back_ios,),
+          leading: Icon(Icons.arrow_back_ios,color: blackColor,),
           title: Text('Home'),
           centerTitle: true,
-          backgroundColor: lightPrimaryColor,
-
+          backgroundColor: whiteColor,
+          titleTextStyle: TextStyle(color: blackColor),
         ),
         body: screens[controller.currScreen],
         backgroundColor: Colors.grey.shade100,
@@ -49,6 +50,7 @@ class BodyWithAppBar extends StatelessWidget {
                 title: 'Category'
             ),
             PandaBarButtonData(
+
                 id: 3,
                 icon: Icons.person,
                 title: 'Profile'
