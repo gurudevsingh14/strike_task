@@ -48,14 +48,19 @@ class TaskTile extends StatelessWidget {
                 radius: 33.0,
                 lineWidth: 8.0,
                 animation: true,
-                percent: 0.7,
+                percent: 0.8,
                 center: new Text(
                   "70.0%",
                   style:
                   new TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
                 ),
+                rotateLinearGradient: true,
+                // linearGradient: LinearGradient(
+                //   colors: [Colors.red,Colors.orange,Colors.yellow,Colors.lightBlue,Colors.lightGreen,Colors.green],
+                //   stops: [0.1,0.3,0.5,0.7,0.8,1],
+                // ),
                 circularStrokeCap: CircularStrokeCap.round,
-                progressColor: Colors.purple,
+                progressColor: Colors.blue,
               ),
             ),
           ],

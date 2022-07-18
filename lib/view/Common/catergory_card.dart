@@ -19,7 +19,7 @@ class CategoryCard extends StatelessWidget {
           width: displayWidth(context)*0.47,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                colors: [primaryColor,lightPrimaryColor,Color(0xFB6DE1A7)],
+                colors: [primaryColor,primayLightColor,Color(0xFB6DE1A7)],
               stops: [0.5,0.8,1],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight

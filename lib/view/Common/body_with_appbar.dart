@@ -14,19 +14,19 @@ class BodyWithAppBar extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         extendBody: true,
-        appBar: AppBar(
-          leading: Icon(Icons.arrow_back_ios,color: blackColor,),
-          title: Text('Home'),
-          centerTitle: true,
-          backgroundColor: whiteColor,
-          titleTextStyle: TextStyle(color: blackColor),
-        ),
+        // appBar: AppBar(
+        //   leading: Icon(Icons.arrow_back_ios,color: blackColor,),
+        //   title: Text('Home'),
+        //   centerTitle: true,
+        //   backgroundColor: whiteColor,
+        //   titleTextStyle: TextStyle(color: blackColor),
+        // ),
         body: screens[controller.currScreen],
-        backgroundColor: Colors.grey.shade100,
+        // backgroundColor: Colors.grey.shade100,
         bottomNavigationBar: PandaBar(
           buttonColor: Colors.grey,
           buttonSelectedColor: primaryColor,
-          fabColors: [primaryColor,lightPrimaryColor],
+          fabColors: [primaryColor,primayLightColor],
           backgroundColor: Colors.white,
           onFabButtonPressed: () {
           },

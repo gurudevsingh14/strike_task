@@ -18,54 +18,85 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Task Categories',style: TextStyle(fontSize: 21,fontWeight: FontWeight.w500,color: blackColor),),
-          ),
-          Container(
-            width: displayWidth(context),
-            height: displayHeight(context)*0.29,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (BuildContext,index){
-              return Column(
-                children: [
-                  CategoryCard(),
-                ],
-              );
-            })
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: lightPrimaryColor.withOpacity(0.4),
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Hey Gurudev',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: primayDarkColor),),
+                    SizedBox(height: 4,),
+                    Text('lets be productive today')
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage('assets/images/dp.jpg'),
+                  ),
+                )
+              ],
             ),
-            height: displayHeight(context)*0.6,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Tasks',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500),),
-                  ),
-                  Expanded(
-                    child: ListView(
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(bottom: 8,left: 8),
+          //   child: Text(
+          //     'Task Categories',
+          //     style: TextStyle(
+          //         fontSize: 21, fontWeight: FontWeight.w500, color: blackColor),
+          //   ),
+          // ),
+          Container(
+              width: displayWidth(context),
+              height: displayHeight(context) * 0.29,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  itemBuilder: (BuildContext, index) {
+                    return Column(
                       children: [
-                        TaskTile(),
-                        TaskTile(),
-                        TaskTile(),
-                        TaskTile(),
-                        TaskTile(),
-                        TaskTile(),
+                        CategoryCard(),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  })),
+          Container(
+              decoration: BoxDecoration(
+                color: primayLightColor.withOpacity(0.4),
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
               ),
-            )
-          )
+              height: displayHeight(context) * 0.6,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '  Tasks',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          TaskTile(),
+                          TaskTile(),
+                          TaskTile(),
+                          TaskTile(),
+                          TaskTile(),
+                          TaskTile(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ))
         ],
       ),
     );
