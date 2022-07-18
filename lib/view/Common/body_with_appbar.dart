@@ -4,6 +4,7 @@ import 'package:pandabar/model.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/screen_controller.dart';
+import 'package:strike_task/view/Common/create_task_modal.dart';
 
 class BodyWithAppBar extends StatelessWidget {
   Widget? child;
@@ -29,6 +30,12 @@ class BodyWithAppBar extends StatelessWidget {
           fabColors: [primaryColor,primayLightColor],
           backgroundColor: Colors.white,
           onFabButtonPressed: () {
+            showModalBottomSheet(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(25),topLeft: Radius.circular(25))),
+                context: context,
+                builder: (BuildContext context){
+              return CreateTaskModal();
+            });
           },
           onChange: (value){
             controller.currScreen=value;

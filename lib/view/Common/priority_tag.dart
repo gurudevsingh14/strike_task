@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import '../../model/priority.dart';
 
 class PriorityTag extends StatelessWidget {
-  const PriorityTag({Key? key}) : super(key: key);
-
+    PriorityModel priorityObj;
+    double? fontSize;
+    PriorityTag({ required this.priorityObj,this.fontSize});
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.red.shade50,
-          border: Border.all(color: Colors.red),
+          color: priorityObj.bgColor!,
+          border: Border.all(color: priorityObj.color!),
           borderRadius: BorderRadius.circular(5),
         ),
         padding: EdgeInsets.symmetric(vertical: 2,horizontal: 16),
-        child: Text('high',maxLines: 2,style: TextStyle(fontSize: 12,color: Colors.red),)
+        child: Text(priorityObj.label!,maxLines: 1,style: TextStyle(fontSize: fontSize??12,color: priorityObj.color!),)
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
@@ -34,9 +35,9 @@ class TaskTile extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    PriorityTag(),
+                    PriorityTag(priorityObj: priorityList[0],),
                     SizedBox(width: 10,),
-                    DaysLeftTag(color: mutedColor,),
+                    DaysLeftTag(color: mutedTextColor,),
                   ],
                 ),
               ],

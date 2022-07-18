@@ -11,8 +11,8 @@ const primayDarkColor=Color(0xFB21A362);
 const primayLightColor=Color(0xFB47D990);
 const whiteColor=Colors.white;
 const blackColor=Colors.black;
-final mutedColor=Colors.grey.shade500;
-
+final mutedlineColor=Colors.grey.shade300;
+final mutedTextColor=Colors.grey.shade500;
 //fonts
 const lato="Lato";
 

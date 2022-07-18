@@ -6,5 +6,4 @@ class Task{
   String? description;
   DateTime? dueDate;
   Priority? priority;
-  
 }
