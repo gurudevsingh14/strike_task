@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../constants/constants.dart';
 
 class CustomDropDownField extends StatefulWidget {
-  String email='gurudev620.gs@gmail.com';
+  String email='home';
 
   @override
   State<CustomDropDownField> createState() => _CustomDropDownFieldState();
@@ -13,20 +13,23 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
+      isExpanded: true,
       // value: dropdownValue,
       value: widget.email,
       style: TextStyle(color: Colors.grey),
       decoration: InputDecoration(
+        labelText: 'Select category',
+        labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor ),
         contentPadding: EdgeInsets.all(8),
         enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              width: 1.5,
+              width: 0.8,
               color: mutedlineColor,
             ),
             borderRadius: BorderRadius.circular(10)),
         focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-        width: 1.5,
+        width: 0.8,
         color: mutedlineColor,
       ),
         borderRadius: BorderRadius.circular(10)),
@@ -38,11 +41,11 @@ class _CustomDropDownFieldState extends State<CustomDropDownField> {
         });
       },
       items: <String>[
-        'gurudev620.gs@gmail.com','gurudev2001@hotmail.com','gurudev123@gmail.com'
+        'home','office','study'
       ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
-          child: Text(value),
+          child: Text(value,overflow: TextOverflow.ellipsis,),
           enabled: true,
         );
       }).toList(),

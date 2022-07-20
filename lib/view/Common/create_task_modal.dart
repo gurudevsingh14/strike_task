@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/view/Common/add_category_button.dart';
 import 'package:strike_task/view/Common/custom_drop_down_field.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
@@ -25,7 +27,14 @@ class CreateTaskModal extends StatelessWidget {
               child: Text('Create Task',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
             ),
             SizedBox(height: 12,),
-            CustomDropDownField(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(flex: 6,child: CustomDropDownField()),
+                Flexible(flex:1,child: Text('or',style: TextStyle(color: mutedTextColor),)),
+                Flexible(flex:6,child: AddCategoryButton()),
+              ],
+            ),
             SizedBox(height: 16,),
             CustomTextField(label : 'Task name'),
             SizedBox(height: 16,),

@@ -21,13 +21,13 @@ class CustomTextField extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
         enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              width: 1.5,
+              width: 0.8,
               color: mutedlineColor,
             ),
             borderRadius: BorderRadius.circular(10)),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-              width: 1.5,
+              width: 0.8,
               color: Colors.lightBlue,
             ),
             borderRadius: BorderRadius.circular(10)),

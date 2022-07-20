@@ -31,9 +31,9 @@ class DatePickerField extends StatelessWidget {
             prefixIcon: Icon(Icons.calendar_month),
             suffixIcon: Icon(Icons.arrow_drop_down),
             labelText: 'Due date',
-            labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor ),
+            labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor,overflow: TextOverflow.ellipsis ),
             // isCollapsed: true,
-            contentPadding: EdgeInsets.symmetric(horizontal: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 0),
             border: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 1.5,
@@ -44,7 +44,7 @@ class DatePickerField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   width: 1.5,
-                  color: mutedlineColor,
+                  color: mutedTextColor,
                 ),
                 borderRadius: BorderRadius.circular(10)),
             focusedBorder: OutlineInputBorder(
