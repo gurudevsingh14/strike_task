@@ -8,6 +8,7 @@ import 'package:strike_task/controller/textfield_controller.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Screens/HomeScreen/home_screen.dart';
+import 'package:strike_task/view/Screens/TaskDetailScreen/task_detail_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PrioritySelectController(),)
       ],
       child: MaterialApp(
+        routes: {
+          '/TaskDetail' : (context) => const TaskDetailScreen(),
+        },
         theme: ThemeData(
           fontFamily: lato,
         ),
