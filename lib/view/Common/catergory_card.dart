@@ -4,6 +4,9 @@ import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/model/task.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 
+import '../../constants/menu_items.dart';
+import '../../model/menu_item_model.dart';
+
 class CategoryCard extends StatelessWidget {
   const CategoryCard({Key? key}) : super(key: key);
 
@@ -35,7 +38,16 @@ class CategoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('12 june 2020',style: TextStyle(color: whiteColor),),
-                  Icon(Icons.more_vert,size: 16,color: whiteColor,)
+                  Container(
+                    height: 16,
+                    width: 20,
+                    child: PopupMenuButton<MenuItemModel>(
+                      padding: EdgeInsets.zero,
+                        icon: Icon(Icons.more_vert,size: 18,color: whiteColor,),
+                        itemBuilder: (context) => [
+                          ...menuItems.map((e) => PopupMenuItem(child: Row(children: [e.icon!,e.text!],)))
+                        ]),
+                  )
                 ],
               ),
               SizedBox(height: 20,),
