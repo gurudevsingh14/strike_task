@@ -4,6 +4,7 @@ import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/controller/priority_select_controller.dart';
 import 'package:strike_task/controller/screen_controller.dart';
+import 'package:strike_task/controller/table_calendar_controller.dart';
 import 'package:strike_task/controller/textfield_controller.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
          ChangeNotifierProvider(create: (context) => ScreenController(),),
         ChangeNotifierProvider(create: (context) => TextFieldController(),),
         ChangeNotifierProvider(create: (context) => DateTimeController(),),
-        ChangeNotifierProvider(create: (context) => PrioritySelectController(),)
+        ChangeNotifierProvider(create: (context) => PrioritySelectController(),),
+        ChangeNotifierProvider(create: (context) => TableCalendarController(),),
       ],
       child: MaterialApp(
         routes: {
