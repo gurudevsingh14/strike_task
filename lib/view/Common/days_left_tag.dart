@@ -3,7 +3,8 @@ import 'package:strike_task/constants/constants.dart';
 
 class DaysLeftTag extends StatelessWidget {
   Color? color=blackColor;
-  DaysLeftTag({required this.color});
+  String? timeLeft;
+  DaysLeftTag({required this.color,required this.timeLeft});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class DaysLeftTag extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 3),
         width: 64,
-        child: Text('3 days left',maxLines: 2,style: TextStyle(fontSize: 12,color: color),)
+        child: Text('$timeLeft left',maxLines: 2,style: TextStyle(fontSize: 12,color: color),)
     );
   }
 }

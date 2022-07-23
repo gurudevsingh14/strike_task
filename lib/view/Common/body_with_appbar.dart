@@ -33,6 +33,7 @@ class BodyWithAppBar extends StatelessWidget {
             showModalBottomSheet(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(25),topLeft: Radius.circular(25))),
                 context: context,
+                isScrollControlled: true,
                 builder: (BuildContext context){
               return CreateTaskModal();
             });

@@ -5,17 +5,20 @@ import 'package:strike_task/controller/textfield_controller.dart';
 
 class CustomTextField extends StatelessWidget {
   String? label;
-  CustomTextField({required this.label});
+  TextEditingController? textController;
+  CustomTextField({this.label,required this.textController});
+
 
   @override
   Widget build(BuildContext context) {
     final controller=Provider.of<TextFieldController>(context);
     return TextFormField(
+      controller: textController,
       minLines: 1,
       maxLines: 16,
       decoration: InputDecoration(
         fillColor: controller.bgColor,
-        labelText: label,
+        labelText: label??"Unnamed",
         labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor ),
         // isCollapsed: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),

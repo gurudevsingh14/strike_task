@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
-import 'package:strike_task/model/task.dart';
+import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 
 import '../../constants/menu_items.dart';
@@ -74,7 +74,7 @@ class CategoryCard extends StatelessWidget {
 
                       child: Text('3/4 completed',maxLines: 1,style: TextStyle(color: whiteColor))
                   ),
-                  DaysLeftTag(color: whiteColor,),
+                  DaysLeftTag(color: whiteColor,timeLeft: "3 days "),
                 ],
               )
             ],

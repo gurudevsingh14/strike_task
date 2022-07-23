@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
-import 'package:strike_task/model/task.dart';
+import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:strike_task/view/Common/catergory_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+
+  String restrictFractionalSeconds(String dateTime) =>
+      dateTime.replaceFirstMapped(RegExp("(\\.\\d{6})\\d+"), (m) => m[1]!);
 
   @override
   Widget build(BuildContext context) {
+    final taskDataController=Provider.of<TaskProvider>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,14 +46,6 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.only(bottom: 8,left: 8),
-          //   child: Text(
-          //     'Task Categories',
-          //     style: TextStyle(
-          //         fontSize: 21, fontWeight: FontWeight.w500, color: blackColor),
-          //   ),
-          // ),
           Container(
               width: displayWidth(context),
               height: displayHeight(context) * 0.29,
@@ -83,15 +81,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: ListView(
-                        children: [
-                          TaskTile(),
-                          TaskTile(),
-                          TaskTile(),
-                          TaskTile(),
-                          TaskTile(),
-                          TaskTile(),
-                        ],
+                      child: ListView.builder(
+                        itemCount: taskDataController.taskList.length,
+                        itemBuilder: (context, index) => TaskTile(
+                          taskName: taskDataController.taskList[index].category,
+                          priority: taskDataController.taskList[index].priority,
+                        ),
                       ),
                     ),
                   ],

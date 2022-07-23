@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PrioritySelectController extends ChangeNotifier{
-  int _selectedIndex=-1;
+  String _selectedPriority="";
 
-  int get selectedIndex => _selectedIndex;
+  String get selectedPriority => _selectedPriority;
 
-  set selectedIndex(int value) {
-    _selectedIndex = value;
+  set selectedPriority(String value) {
+    _selectedPriority = value;
     notifyListeners();
   }
 }

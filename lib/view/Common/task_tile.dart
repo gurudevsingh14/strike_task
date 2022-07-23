@@ -5,9 +5,13 @@ import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
-class TaskTile extends StatelessWidget {
-  const TaskTile({Key? key}) : super(key: key);
+import '../../model/priority.dart';
 
+class TaskTile extends StatelessWidget {
+  String? taskName;
+  String? priority;
+  DateTime? dueDate;
+  TaskTile({this.taskName,this.priority,this.dueDate});
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -32,16 +36,16 @@ class TaskTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text('Task title',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                  Text(taskName??"",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                   SizedBox(height: 8,),
                   Text('3/10 subtask completed',style: TextStyle(color: blackColor),),
                   SizedBox(height: 8,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      PriorityTag(priorityObj: priorityList[0],),
+                      PriorityTag(priorityObj: priorityList[priority]??priorityList['high']!),
                       SizedBox(width: 10,),
-                      DaysLeftTag(color: mutedTextColor,),
+                      DaysLeftTag(color: mutedTextColor,timeLeft: "3 days",),
                     ],
                   ),
                 ],

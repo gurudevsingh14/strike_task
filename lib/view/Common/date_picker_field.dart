@@ -6,6 +6,8 @@ import '../../constants/constants.dart';
 
 class DatePickerField extends StatelessWidget {
 
+  TextEditingController dueDateController;
+  DatePickerField({required this.dueDateController});
   @override
   Widget build(BuildContext context) {
     final controller= Provider.of<DateTimeController>(context);
@@ -21,12 +23,13 @@ class DatePickerField extends StatelessWidget {
           ).then((value) {
             if(value!=null) {
                 controller.selectedDate=value;
+                dueDateController=TextEditingController(text: value.toIso8601String());
               }
           });
         },
         child: TextFormField(
           enabled: false,
-           controller: TextEditingController()..text = '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}',
+           controller: TextEditingController()..text = '${selectedDate.day}-${selectedDate.month}-${selectedDate.year}',
           decoration: InputDecoration(
             prefixIcon: Icon(Icons.calendar_month),
             suffixIcon: Icon(Icons.arrow_drop_down),

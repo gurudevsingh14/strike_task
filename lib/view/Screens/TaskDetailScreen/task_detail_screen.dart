@@ -3,7 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
-import 'package:strike_task/model/task.dart';
+import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
 import 'components/sub_task_tile.dart';
@@ -33,7 +33,7 @@ class TaskDetailScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('20-07-2022'),
-                  PriorityTag(priorityObj: priorityList[0],)
+                  PriorityTag(priorityObj: priorityList['high']!,)
                 ],
               ),
               SizedBox(height: 12,),
