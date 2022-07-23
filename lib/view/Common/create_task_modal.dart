@@ -15,8 +15,8 @@ import 'package:strike_task/view/Common/priority_tag.dart';
 import '../../controller/priority_select_controller.dart';
 
 class CreateTaskModal extends StatelessWidget {
-  TextEditingController? taskNameController;
-  TextEditingController? descriptionController;
+  TextEditingController taskNameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController dueDateController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController priorityController = TextEditingController();
@@ -24,7 +24,7 @@ class CreateTaskModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<PrioritySelectController>(context);
-    final taskController=Provider.of<TaskProvider>(context);
+    final taskController = Provider.of<TaskProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: SingleChildScrollView(
@@ -64,11 +64,17 @@ class CreateTaskModal extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              CustomTextField(label: 'Task name',textController: taskNameController,),
+              CustomTextField(
+                label: 'Task name',
+                textController: taskNameController,
+              ),
               SizedBox(
                 height: 16,
               ),
-              CustomTextField(label: 'Add description',textController: descriptionController,),
+              CustomTextField(
+                label: 'Add description',
+                textController: descriptionController,
+              ),
               SizedBox(
                 height: 16,
               ),
@@ -116,13 +122,12 @@ class CreateTaskModal extends StatelessWidget {
                 fontSize: 18,
                 callBack: () {
                   taskController.addTask(TaskModel(
-                      id :'1',
-                      name :taskNameController?.text,
-                      category:categoryController.text,
-                      description: descriptionController?.text,
-                      dueDate:dueDateController.text,
-                      priority:priorityController.text
-                  ));
+                      id: '1',
+                      name: taskNameController.text,
+                      category: categoryController.text,
+                      description: descriptionController.text,
+                      dueDate: dueDateController.text,
+                      priority: priorityController.text));
                 },
               )
             ],
