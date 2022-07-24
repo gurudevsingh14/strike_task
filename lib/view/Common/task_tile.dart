@@ -11,23 +11,19 @@ class TaskTile extends StatelessWidget {
   String? taskName;
   String? priority;
   DateTime? dueDate;
-  TaskTile({this.taskName,this.priority,this.dueDate});
+  TaskTile({this.taskName, this.priority, this.dueDate});
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.pushNamed(context, '/TaskDetail');
       },
       child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 8,
         child: Container(
           padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10)
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
           height: 90,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,16 +32,33 @@ class TaskTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(taskName??"",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                  SizedBox(height: 8,),
-                  Text('3/10 subtask completed',style: TextStyle(color: blackColor),),
-                  SizedBox(height: 8,),
+                  Text(
+                    taskName ?? "",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    '3/10 subtask completed',
+                    style: TextStyle(color: blackColor),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      PriorityTag(priorityObj: priorityList[priority]??priorityList['high']!),
-                      SizedBox(width: 10,),
-                      DaysLeftTag(color: mutedTextColor,timeLeft: "3 days",),
+                      PriorityTag(
+                          priorityObj:
+                              priorityList[priority] ?? priorityList['high']!),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      DaysLeftTag(
+                        color: mutedTextColor,
+                        timeLeft: "3 days",
+                      ),
                     ],
                   ),
                 ],
@@ -60,8 +73,8 @@ class TaskTile extends StatelessWidget {
                   percent: 0.8,
                   center: new Text(
                     "70.0%",
-                    style:
-                    new TextStyle(fontWeight: FontWeight.w500, fontSize: 14.0),
+                    style: new TextStyle(
+                        fontWeight: FontWeight.w500, fontSize: 14.0),
                   ),
                   rotateLinearGradient: true,
                   // linearGradient: LinearGradient(
