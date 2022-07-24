@@ -12,13 +12,12 @@ import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:strike_task/view/Common/catergory_card.dart';
 
 class HomeScreen extends StatelessWidget {
-
   String restrictFractionalSeconds(String dateTime) =>
       dateTime.replaceFirstMapped(RegExp("(\\.\\d{6})\\d+"), (m) => m[1]!);
 
   @override
   Widget build(BuildContext context) {
-    final taskDataController=Provider.of<TaskProvider>(context);
+    final taskDataController = Provider.of<TaskProvider>(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,8 +30,16 @@ class HomeScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hey Gurudev',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: primayDarkColor),),
-                    SizedBox(height: 4,),
+                    Text(
+                      'Hey Gurudev',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: primayDarkColor),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
                     Text('lets be productive today')
                   ],
                 ),
@@ -84,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: taskDataController.taskList.length,
                         itemBuilder: (context, index) => TaskTile(
-                          taskName: taskDataController.taskList[index].category,
+                          taskName: taskDataController.taskList[index].name,
                           priority: taskDataController.taskList[index].priority,
                         ),
                       ),

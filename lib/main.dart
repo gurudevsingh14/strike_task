@@ -13,6 +13,7 @@ import 'package:strike_task/view/Screens/HomeScreen/home_screen.dart';
 import 'package:strike_task/view/Screens/TaskDetailScreen/task_detail_screen.dart';
 
 void main() {
+  // this is root of the app
   runApp(MyApp());
 }
 
