@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/add_category_button.dart';
@@ -17,13 +18,14 @@ import '../../controller/priority_select_controller.dart';
 class CreateTaskModal extends StatelessWidget {
   TextEditingController taskNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController dueDateController = TextEditingController();
+  // TextEditingController dueDateController = TextEditingController();
   TextEditingController categoryController = TextEditingController();
   TextEditingController priorityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<PrioritySelectController>(context);
+    final dueDateController=Provider.of<DateTimeController>(context);
     final taskController = Provider.of<TaskProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -78,7 +80,7 @@ class CreateTaskModal extends StatelessWidget {
               SizedBox(
                 height: 16,
               ),
-              DatePickerField(dueDateController: dueDateController),
+              DatePickerField(),
               SizedBox(
                 height: 8,
               ),
@@ -126,7 +128,7 @@ class CreateTaskModal extends StatelessWidget {
                       name: taskNameController.text,
                       category: categoryController.text,
                       description: descriptionController.text,
-                      dueDate: dueDateController.text,
+                      dueDate: dueDateController.selectedDate,
                       priority: priorityController.text));
                 },
               )

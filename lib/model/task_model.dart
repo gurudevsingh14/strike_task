@@ -7,7 +7,7 @@ class TaskModel{
   String? name;
   String? category;
   String? description;
-  String? dueDate;
+  DateTime? dueDate;
   String? priority;
 
   TaskModel({this.id, this.name, this.category, this.description, this.dueDate,

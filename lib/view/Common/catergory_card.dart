@@ -8,7 +8,6 @@ import '../../constants/menu_items.dart';
 import '../../model/menu_item_model.dart';
 
 class CategoryCard extends StatelessWidget {
-  const CategoryCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +73,7 @@ class CategoryCard extends StatelessWidget {
 
                       child: Text('3/4 completed',maxLines: 1,style: TextStyle(color: whiteColor))
                   ),
-                  DaysLeftTag(color: whiteColor,timeLeft: "3 days "),
+                  DaysLeftTag(color: whiteColor),
                 ],
               )
             ],

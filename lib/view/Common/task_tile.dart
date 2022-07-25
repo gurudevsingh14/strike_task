@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
@@ -57,7 +59,7 @@ class TaskTile extends StatelessWidget {
                       ),
                       DaysLeftTag(
                         color: mutedTextColor,
-                        timeLeft: "3 days",
+                        dueDate: dueDate!,
                       ),
                     ],
                   ),
@@ -85,6 +87,17 @@ class TaskTile extends StatelessWidget {
                   progressColor: Colors.blue,
                 ),
               ),
+              // PopupMenuButton<PopupMenuItem>(
+              //   icon: Icon(Icons.arrow_drop_down),
+              //   itemBuilder: (context) => [...menuItems.map((e) => PopupMenuItem(
+              //           child: Row(
+              //         children: [
+              //           e.icon!,
+              //           e.text!
+              //         ],
+              //       ))),
+              //     ]
+              // )
             ],
           ),
         ),

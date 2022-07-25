@@ -93,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                         itemBuilder: (context, index) => TaskTile(
                           taskName: taskDataController.taskList[index].name,
                           priority: taskDataController.taskList[index].priority,
+                          dueDate: taskDataController.taskList[index].dueDate,
                         ),
                       ),
                     ),
