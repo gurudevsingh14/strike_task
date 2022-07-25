@@ -6,6 +6,8 @@ import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
+import 'package:strike_task/view/Common/add_button.dart';
+import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
 import 'components/sub_task_tile.dart';
@@ -16,7 +18,6 @@ class TaskDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskDataController= Provider.of<TaskProvider>(context);
-    // TaskModel task=taskDataController.selectedTask;
     DateTime dueDate=taskDataController.selectedTask.dueDate!;
     Color textColor=Colors.grey.shade500;
     double indicatorRadius=50;
@@ -127,7 +128,28 @@ class TaskDetailScreen extends StatelessWidget {
               Text(taskDataController.selectedTask.description!,
               maxLines: 50,style: TextStyle(color: textColor),),
               SizedBox(height: 16,)],
-              Text('Sub Task',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: textColor),),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Sub Task',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: textColor),),
+                  AddButton(
+                    text: 'Add subtask',
+                    onPressed: (){
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          title: CustomTextField(textController: TextEditingController(),label: 'Sub Task'),
+                          actions: [
+                          TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
+                          TextButton(onPressed: (){
+                            Navigator.pop(context);
+                          }, child: Text('Ok'),)
+                        ],);
+                      },);
+                    },
+                  ),
+                ],
+              ),
               SizedBox(height: 12,),
               SubTaskTile(),
               SubTaskTile(),

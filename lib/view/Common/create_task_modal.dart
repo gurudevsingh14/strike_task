@@ -7,7 +7,7 @@ import 'package:strike_task/controller/category_controller.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
-import 'package:strike_task/view/Common/add_category_button.dart';
+import 'package:strike_task/view/Common/add_button.dart';
 import 'package:strike_task/view/Common/custom_drop_down_field.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
@@ -58,7 +58,7 @@ class CreateTaskModal extends StatelessWidget {
                         'or',
                         style: TextStyle(color: mutedTextColor),
                       )),
-                  Flexible(flex: 6, child: AddCategoryButton()),
+                  Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){},)),
                 ],
               ),
               SizedBox(

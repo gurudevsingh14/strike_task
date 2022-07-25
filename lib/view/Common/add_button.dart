@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../../constants/constants.dart';
 
-class AddCategoryButton extends StatelessWidget {
-  const AddCategoryButton({Key? key}) : super(key: key);
-
+class AddButton extends StatelessWidget {
+  String? text;
+  VoidCallback? onPressed;
+  AddButton({this.text,required this.onPressed});
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 135,
       child: MaterialButton(
         elevation: 0,
-        color: Colors.grey.shade300,
-        padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+        color: primaryColor,
+        padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
         shape: OutlineInputBorder(
             borderSide: BorderSide(
               width: 0,
@@ -20,13 +21,14 @@ class AddCategoryButton extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(10)
         ),
-        onPressed: (){},
+        onPressed: onPressed,
         child:
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.add_circle_outline,color: whiteColor,),
             SizedBox(width: 5,),
-            Text('Add Category',style: TextStyle(color: whiteColor),)
+            Text(text??"",style: TextStyle(color: whiteColor),)
           ],
         ),
       ),

@@ -24,4 +24,13 @@ class TaskProvider extends ChangeNotifier{
     taskList.remove(task);
     notifyListeners();
   }
+  void addSubTask(TaskModel task,String subTask){
+    task.subTask!.add(subTask);
+  }
+  void addSubTasks(TaskModel task,List<String> subTasks){
+    task.subTask!.addAll(subTasks);
+  }
+  void deletesubTask(TaskModel task,int index){
+    task.subTask!.removeAt(index);
+  }
 }
