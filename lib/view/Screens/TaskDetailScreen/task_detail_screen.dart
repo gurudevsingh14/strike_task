@@ -17,6 +17,7 @@ class TaskDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskDataController= Provider.of<TaskProvider>(context);
     // TaskModel task=taskDataController.selectedTask;
+    DateTime dueDate=taskDataController.selectedTask.dueDate!;
     Color textColor=Colors.grey.shade500;
     double indicatorRadius=50;
     return Scaffold(
@@ -31,13 +32,13 @@ class TaskDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(taskDataController.selectedTask.name??'',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
+              Text(taskDataController.selectedTask.name??'',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 26),maxLines: 10,),
               SizedBox(height: 12,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('20-07-2022'),
-                  PriorityTag(priorityObj: priorityList['high']!,)
+                  Text('${dueDate.day}-${dueDate.month}-${dueDate.year}',style: TextStyle(color: textColor)),
+                  PriorityTag(priorityObj: priorityList[taskDataController.selectedTask.priority??'high']!,)
                 ],
               ),
               SizedBox(height: 12,),
@@ -121,11 +122,11 @@ class TaskDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20,),
-              Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 19,color: textColor),),
+              if(taskDataController.selectedTask.description!.isNotEmpty)...[Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 19,color: textColor),),
               SizedBox(height: 8,),
-              Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+              Text(taskDataController.selectedTask.description!,
               maxLines: 50,style: TextStyle(color: textColor),),
-              SizedBox(height: 16,),
+              SizedBox(height: 16,)],
               Text('Sub Task',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: textColor),),
               SizedBox(height: 12,),
               SubTaskTile(),
