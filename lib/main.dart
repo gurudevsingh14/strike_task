@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/controller/category_controller.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/controller/priority_select_controller.dart';
 import 'package:strike_task/controller/screen_controller.dart';
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => DateTimeController(),),
         ChangeNotifierProvider(create: (context) => PrioritySelectController(),),
         ChangeNotifierProvider(create: (context) => TableCalendarController(),),
-        ChangeNotifierProvider(create: (context) => TaskProvider(),)
+        ChangeNotifierProvider(create: (context) => TaskProvider(),),
+        ChangeNotifierProvider(create: (context) => CategoryController(),)
       ],
       child: MaterialApp(
         routes: {

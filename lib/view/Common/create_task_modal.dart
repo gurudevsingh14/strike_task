@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/controller/category_controller.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
@@ -18,14 +19,13 @@ import '../../controller/priority_select_controller.dart';
 class CreateTaskModal extends StatelessWidget {
   TextEditingController taskNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  // TextEditingController dueDateController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
   TextEditingController priorityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<PrioritySelectController>(context);
     final dueDateController=Provider.of<DateTimeController>(context);
+    final categoryController=Provider.of<CategoryController>(context);
     final taskController = Provider.of<TaskProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -51,9 +51,7 @@ class CreateTaskModal extends StatelessWidget {
                 children: [
                   Flexible(
                       flex: 6,
-                      child: CustomDropDownField(
-                        categoryController: categoryController,
-                      )),
+                      child: CustomDropDownField()),
                   Flexible(
                       flex: 1,
                       child: Text(
@@ -126,7 +124,7 @@ class CreateTaskModal extends StatelessWidget {
                   taskController.addTask(TaskModel(
                       id: '1',
                       name: taskNameController.text,
-                      category: categoryController.text,
+                      category: categoryController.selectedCategory,
                       description: descriptionController.text,
                       dueDate: dueDateController.selectedDate,
                       priority: priorityController.text));

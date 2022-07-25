@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/constants/priority.dart';
@@ -8,25 +9,23 @@ import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
 import '../../model/priority.dart';
+import '../../model/task_model.dart';
+import '../../providers/task_provider.dart';
 
 class TaskTile extends StatelessWidget {
-  String? taskName;
-  String? priority;
-  DateTime? dueDate;
-  TaskTile({this.taskName, this.priority, this.dueDate});
+  TaskModel? task;
+  TaskTile({this.task});
   @override
   Widget build(BuildContext context) {
+    final taskDataController=Provider.of<TaskProvider>(context);
     return InkWell(
       onTap: () {
+        taskDataController.selectedTask=task!;
         Navigator.pushNamed(context, '/TaskDetail');
       },
-      child: Container(
-        padding: EdgeInsets.zero,
-        margin: EdgeInsets.zero,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-          color: Colors.white
-        ),
+      child: Card(
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Slidable(
           child: Card(
             margin: EdgeInsets.zero,
@@ -46,7 +45,7 @@ class TaskTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        taskName ?? "",
+                        task!.name??'',
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16),
                       ),
@@ -64,14 +63,14 @@ class TaskTile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           PriorityTag(
-                              priorityObj: priorityList[priority] ??
+                              priorityObj: priorityList[task?.priority??"high"] ??
                                   priorityList['high']!),
                           SizedBox(
                             width: 10,
                           ),
                           DaysLeftTag(
                             color: mutedTextColor,
-                            dueDate: dueDate!,
+                            dueDate: task!.dueDate,
                           ),
                         ],
                       ),
@@ -91,25 +90,10 @@ class TaskTile extends StatelessWidget {
                             fontWeight: FontWeight.w500, fontSize: 14.0),
                       ),
                       rotateLinearGradient: true,
-                      // linearGradient: LinearGradient(
-                      //   colors: [Colors.red,Colors.orange,Colors.yellow,Colors.lightBlue,Colors.lightGreen,Colors.green],
-                      //   stops: [0.1,0.3,0.5,0.7,0.8,1],
-                      // ),
                       circularStrokeCap: CircularStrokeCap.round,
                       progressColor: Colors.blue,
                     ),
                   ),
-                  // PopupMenuButton<PopupMenuItem>(
-                  //   icon: Icon(Icons.arrow_drop_down),
-                  //   itemBuilder: (context) => [...menuItems.map((e) => PopupMenuItem(
-                  //           child: Row(
-                  //         children: [
-                  //           e.icon!,
-                  //           e.text!
-                  //         ],
-                  //       ))),
-                  //     ]
-                  // )
                 ],
               ),
             ),
@@ -119,18 +103,21 @@ class TaskTile extends StatelessWidget {
             children: [
               SlidableAction(
                 // An action can be bigger than the others.
-                onPressed: (context) {},
+                onPressed: (context) {
+                },
                 backgroundColor: Color(0xFF7BC043),
                 foregroundColor: Colors.white,
-                icon: Icons.archive,
-                label: 'Archive',
+                icon: Icons.edit,
+                label: 'Edit',
               ),
               SlidableAction(
-                onPressed: (context) {},
+                onPressed: (context) {
+                  taskDataController.deleteTask(task!);
+                },
                 backgroundColor: Color(0xFF0392CF),
                 foregroundColor: Colors.white,
-                icon: Icons.save,
-                label: 'Save',
+                icon: Icons.delete,
+                label: 'Delete',
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),
                     bottomRight: Radius.circular(10)),

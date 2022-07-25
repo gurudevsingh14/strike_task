@@ -91,9 +91,7 @@ class HomeScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: taskDataController.taskList.length,
                         itemBuilder: (context, index) => TaskTile(
-                          taskName: taskDataController.taskList[index].name,
-                          priority: taskDataController.taskList[index].priority,
-                          dueDate: taskDataController.taskList[index].dueDate,
+                          task: taskDataController.taskList[index],
                         ),
                       ),
                     ),

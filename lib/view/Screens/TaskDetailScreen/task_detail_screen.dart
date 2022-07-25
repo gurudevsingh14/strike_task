@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
 import 'components/sub_task_tile.dart';
@@ -13,6 +15,8 @@ class TaskDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskDataController= Provider.of<TaskProvider>(context);
+    // TaskModel task=taskDataController.selectedTask;
     Color textColor=Colors.grey.shade500;
     double indicatorRadius=50;
     return Scaffold(
@@ -27,7 +31,7 @@ class TaskDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Task Title',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
+              Text(taskDataController.selectedTask.name??'',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,),),
               SizedBox(height: 12,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:provider/provider.dart';
+import 'package:strike_task/controller/category_controller.dart';
 
 import '../../constants/constants.dart';
 
 class CustomDropDownField extends StatelessWidget {
-  String category = 'home';
-  TextEditingController categoryController;
-  CustomDropDownField({required this.categoryController});
-
+  String category='home';
   @override
   Widget build(BuildContext context) {
+    final categoryController=Provider.of<CategoryController>(context);
     return DropdownButtonFormField<String>(
       isExpanded: true,
-      // value: dropdownValue,
       value: category,
       style: TextStyle(color: Colors.grey),
       decoration: InputDecoration(
@@ -35,7 +35,7 @@ class CustomDropDownField extends StatelessWidget {
       icon: Icon(Icons.arrow_drop_down, color: Colors.grey),
       onChanged: (newValue) {
         category = newValue!;
-        categoryController = TextEditingController(text: newValue);
+        categoryController.selectedCategory=newValue;
       },
       items: <String>['home', 'office', 'study']
           .map<DropdownMenuItem<String>>((String value) {
