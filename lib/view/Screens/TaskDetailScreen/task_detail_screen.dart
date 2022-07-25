@@ -10,10 +10,11 @@ import 'package:strike_task/view/Common/add_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
+import '../../../model/sub_task_model.dart';
 import 'components/sub_task_tile.dart';
 
 class TaskDetailScreen extends StatelessWidget {
-  const TaskDetailScreen({Key? key}) : super(key: key);
+  TextEditingController subTaskController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -138,10 +139,11 @@ class TaskDetailScreen extends StatelessWidget {
                     onPressed: (){
                       showDialog(context: context, builder: (context) {
                         return AlertDialog(
-                          title: CustomTextField(textController: TextEditingController(),label: 'Sub Task'),
+                          title: CustomTextField(textController: subTaskController,label: 'Sub Task'),
                           actions: [
                           TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
                           TextButton(onPressed: (){
+                            taskDataController.addSubTask(taskDataController.selectedTask, SubTask(text:subTaskController.text));
                             Navigator.pop(context);
                           }, child: Text('Ok'),)
                         ],);
@@ -151,11 +153,7 @@ class TaskDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 12,),
-              SubTaskTile(),
-              SubTaskTile(),
-              SubTaskTile(),
-              SubTaskTile(),
-              SubTaskTile(),
+              ...taskDataController.selectedTask.subTaskList.map((subTask) => SubTaskTile(subtask: subTask)).toList(),
             ],
           ),
         ),

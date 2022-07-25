@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
-          '/TaskDetail' : (context) => const TaskDetailScreen(),
+          '/TaskDetail' : (context) =>TaskDetailScreen(),
         },
         theme: ThemeData(
           fontFamily: lato,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/table_calendar_controller.dart';
+import 'package:strike_task/model/sub_task_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../model/task_model.dart';
@@ -66,7 +67,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
         eventLoader: _getTasksOnSelectedDay,
       ),
-        ..._getTasksOnSelectedDay(DateTime.now()).map((value) => Column(children: [SubTaskTile(),SubTaskTile()],)).toList()
+        ..._getTasksOnSelectedDay(DateTime.now()).map((value) => Column(children: [SubTaskTile(subtask: SubTask(),)],)).toList()
       ]
     );
   }

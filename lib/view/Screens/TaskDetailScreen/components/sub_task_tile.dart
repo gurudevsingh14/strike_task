@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/model/menu_item_model.dart';
+import 'package:strike_task/model/task_model.dart';
 
 import '../../../../constants/menu_items.dart';
+import '../../../../model/sub_task_model.dart';
 
-class SubTaskTile extends StatelessWidget {
-  const SubTaskTile({Key? key}) : super(key: key);
+class SubTaskTile extends StatefulWidget {
+  SubTask subtask;
+  SubTaskTile({required this.subtask});
 
+  @override
+  State<SubTaskTile> createState() => _SubTaskTileState();
+}
+
+class _SubTaskTileState extends State<SubTaskTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,8 +28,12 @@ class SubTaskTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Checkbox(value: true, onChanged: (value){}),
-            Text('Lorem ipsum dolor sit amet'),
+            Checkbox(value: widget.subtask.done, onChanged: (value){
+              setState(() {
+                widget.subtask.done=value!;
+              });
+            }),
+            Text(widget.subtask.text!),
             Expanded(child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

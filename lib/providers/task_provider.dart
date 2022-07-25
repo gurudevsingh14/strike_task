@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:strike_task/model/sub_task_model.dart';
 
 import '../model/task_model.dart';
 
@@ -24,13 +25,13 @@ class TaskProvider extends ChangeNotifier{
     taskList.remove(task);
     notifyListeners();
   }
-  void addSubTask(TaskModel task,String subTask){
-    task.subTask!.add(subTask);
+  void addSubTask(TaskModel task,SubTask subTask){
+    task.subTaskList.add(subTask);
   }
-  void addSubTasks(TaskModel task,List<String> subTasks){
-    task.subTask!.addAll(subTasks);
+  void addSubTasks(TaskModel task,List<SubTask> subTasks){
+    task.subTaskList.addAll(subTasks);
   }
   void deletesubTask(TaskModel task,int index){
-    task.subTask!.removeAt(index);
+    task.subTaskList.removeAt(index);
   }
 }
