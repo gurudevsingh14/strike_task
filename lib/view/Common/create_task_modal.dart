@@ -13,13 +13,15 @@ import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Common/date_picker_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
-
+import 'package:uuid/uuid.dart';
 import '../../controller/priority_select_controller.dart';
 
 class CreateTaskModal extends StatelessWidget {
   TextEditingController taskNameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController priorityController = TextEditingController();
+
+  var uuid=Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +124,7 @@ class CreateTaskModal extends StatelessWidget {
                 fontSize: 18,
                 callBack: () {
                   taskController.addTask(TaskModel(
-                      id: '1',
+                      id: uuid.v1(),
                       name: taskNameController.text,
                       category: categoryController.selectedCategory,
                       description: descriptionController.text,

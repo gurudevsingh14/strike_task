@@ -40,6 +40,7 @@ dependencies:
   table_calendar: ^3.0.6
   age_calculator: ^1.0.0
   flutter_slidable: ^2.0.0
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

@@ -3,22 +3,27 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/textfield_controller.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   String? label;
   TextEditingController? textController;
   CustomTextField({this.label,required this.textController});
 
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  @override
   Widget build(BuildContext context) {
     final controller=Provider.of<TextFieldController>(context);
     return TextFormField(
-      controller: textController,
+      controller: widget.textController,
       minLines: 1,
       maxLines: 16,
       decoration: InputDecoration(
         fillColor: controller.bgColor,
-        labelText: label??"Unnamed",
+        labelText: widget.label??"Unnamed",
         labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor ),
         // isCollapsed: true,
         contentPadding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),

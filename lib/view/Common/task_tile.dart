@@ -8,6 +8,7 @@ import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 
+import '../../constants/device_size.dart';
 import '../../model/priority.dart';
 import '../../model/task_model.dart';
 import '../../providers/task_provider.dart';
@@ -44,10 +45,13 @@ class TaskTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        task!.name??'',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                      SizedBox(
+                        width: displayWidth(context)*0.65,
+                        child: Text(
+                          task!.name??'',
+                          style: TextStyle(overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.w500, fontSize: 16),
+                        ),
                       ),
                       SizedBox(
                         height: 8,
@@ -99,6 +103,7 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           endActionPane: ActionPane(
+
             motion: DrawerMotion(),
             children: [
               SlidableAction(
