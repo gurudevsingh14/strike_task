@@ -29,112 +29,123 @@ class CreateTaskModal extends StatelessWidget {
     final dueDateController=Provider.of<DateTimeController>(context);
     final categoryController=Provider.of<CategoryController>(context);
     final taskController = Provider.of<TaskProvider>(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
         child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Text(
-                  'Create Task',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          // padding: EdgeInsets.symmetric(horizontal: 8.0),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom,right: 8.0,left: 8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(onPressed: (){
+                  Navigator.pop(context);
+                }, icon: Icon(Icons.arrow_back_ios,),padding: EdgeInsets.zero,),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    'Create Task',
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flexible(
-                      flex: 6,
-                      child: CustomDropDownField()),
-                  Flexible(
-                      flex: 1,
-                      child: Text(
-                        'or',
-                        style: TextStyle(color: mutedTextColor),
-                      )),
-                  Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){},)),
-                ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              CustomTextField(
-                label: 'Task name',
-                textController: taskNameController,
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              CustomTextField(
-                label: 'Add description',
-                textController: descriptionController,
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              DatePickerField(),
-              SizedBox(
-                height: 8,
-              ),
-              Text(
-                '  Priority',
-                style: TextStyle(color: mutedTextColor),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: priorityList
-                    .map((priority, value) => MapEntry(
-                        priority,
-                        SizedBox(
-                            height: 35,
-                            child: InkWell(
-                                onTap: () {
-                                  controller.selectedPriority = priority;
-                                  priorityController =
-                                      TextEditingController(text: priority);
-                                },
-                                child: PriorityTag(
-                                  priorityObj: value,
-                                  fontSize: 16,
-                                  selected:
-                                      controller.selectedPriority == priority
-                                          ? true
-                                          : false,
-                                )))))
-                    .values
-                    .toList(),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              CustomRoundRectButton(
-                text: 'Create Task',
-                height: 50,
-                fontSize: 18,
-                callBack: () {
-                  taskController.addTask(TaskModel(
-                      id: uuid.v1(),
-                      name: taskNameController.text,
-                      category: categoryController.selectedCategory,
-                      description: descriptionController.text,
-                      dueDate: dueDateController.selectedDate,
-                      priority: priorityController.text));
-                },
-              )
-            ],
+                Container(
+                  width: displayWidth(context),
+                  alignment: Alignment.center,
+                    child: Image.asset('assets/images/create_task.png',height: displayHeight(context)*0.27,)),
+                SizedBox(
+                  height: 12,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                        flex: 6,
+                        child: CustomDropDownField()),
+                    Flexible(
+                        flex: 1,
+                        child: Text(
+                          'or',
+                          style: TextStyle(color: mutedTextColor),
+                        )),
+                    Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){},)),
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                CustomTextField(
+                  label: 'Task name',
+                  textController: taskNameController,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                CustomTextField(
+                  label: 'Add description',
+                  textController: descriptionController,
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                DatePickerField(),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  '  Priority',
+                  style: TextStyle(color: mutedTextColor),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: priorityList
+                      .map((priority, value) => MapEntry(
+                          priority,
+                          SizedBox(
+                              height: 35,
+                              child: InkWell(
+                                  onTap: () {
+                                    controller.selectedPriority = priority;
+                                    priorityController =
+                                        TextEditingController(text: priority);
+                                  },
+                                  child: PriorityTag(
+                                    priorityObj: value,
+                                    fontSize: 16,
+                                    selected:
+                                        controller.selectedPriority == priority
+                                            ? true
+                                            : false,
+                                  )))))
+                      .values
+                      .toList(),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+              ],
+            ),
           ),
         ),
+      ),
+      resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: CustomRoundRectButton(
+        text: 'Create Task',
+        width: displayWidth(context)*0.96,
+        height: 50,
+        fontSize: 18,
+        callBack: () {
+          taskController.addTask(TaskModel(
+              id: uuid.v1(),
+              name: taskNameController.text,
+              category: categoryController.selectedCategory,
+              description: descriptionController.text,
+              dueDate: dueDateController.selectedDate,
+              priority: priorityController.text));
+        },
       ),
     );
   }

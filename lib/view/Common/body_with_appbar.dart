@@ -30,13 +30,14 @@ class BodyWithAppBar extends StatelessWidget {
           fabColors: [primaryColor,primayLightColor],
           backgroundColor: Colors.white,
           onFabButtonPressed: () {
-            showModalBottomSheet(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(25),topLeft: Radius.circular(25))),
-                context: context,
-                isScrollControlled: true,
-                builder: (BuildContext context){
-              return CreateTaskModal();
-            });
+            // showModalBottomSheet(
+            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(25),topLeft: Radius.circular(25))),
+            //     context: context,
+            //     isScrollControlled: true,
+            //     builder: (BuildContext context){
+            //   return CreateTaskModal();
+            // });
+             Navigator.pushNamed(context, '/CreateTask');
           },
           onChange: (value){
             controller.currScreen=value;

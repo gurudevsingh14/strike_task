@@ -9,9 +9,11 @@ import 'package:strike_task/controller/table_calendar_controller.dart';
 import 'package:strike_task/controller/textfield_controller.dart';
 import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
+import 'package:strike_task/view/Common/create_task_modal.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Screens/HomeScreen/home_screen.dart';
 import 'package:strike_task/view/Screens/TaskDetailScreen/task_detail_screen.dart';
+import 'package:strike_task/view/Common/create_task_modal.dart';
 
 void main() {
   // this is root of the app
@@ -29,11 +31,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => PrioritySelectController(),),
         ChangeNotifierProvider(create: (context) => TableCalendarController(),),
         ChangeNotifierProvider(create: (context) => TaskProvider(),),
-        ChangeNotifierProvider(create: (context) => CategoryController(),)
+        ChangeNotifierProvider(create: (context) => CategoryController(),),
       ],
       child: MaterialApp(
         routes: {
           '/TaskDetail' : (context) =>TaskDetailScreen(),
+          '/CreateTask' : (context) => CreateTaskModal()
         },
         theme: ThemeData(
           fontFamily: lato,
