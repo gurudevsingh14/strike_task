@@ -28,7 +28,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
 
   TextEditingController priorityController = TextEditingController();
 
-
+  TextEditingController addCategoryController = TextEditingController();
 
   var uuid=Uuid();
 
@@ -39,6 +39,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
     taskNameController.dispose();
     descriptionController.dispose();
     priorityController.dispose();
+    addCategoryController.dispose();
     super.dispose();
   }
 
@@ -109,7 +110,19 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                               ),
                             ),
                           )),
-                      Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){},)),
+                      Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){
+                        showDialog(context: context, builder: (context) {
+                          return AlertDialog(
+                            title: CustomTextField(label: "Enter Category",textController: addCategoryController,),
+                            actions: [
+                              TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
+                              TextButton(onPressed: (){
+                                categoryController.addcategory(addCategoryController.text);
+                                Navigator.pop(context);
+                              }, child: Text('Ok'),)
+                            ],);
+                        },);
+                      },)),
                     ],
                   ),
                   SizedBox(

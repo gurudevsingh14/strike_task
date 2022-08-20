@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/controller/category_controller.dart';
 
+import '../../constants/category_list.dart';
 import '../../constants/constants.dart';
 
 class CustomDropDownField extends StatelessWidget {
@@ -52,7 +53,7 @@ class CustomDropDownField extends StatelessWidget {
         category = newValue;
         categoryController.selectedCategory=newValue;
       },
-      items: <String>['home', 'office', 'study']
+      items: categoryList
           .map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem(
           value: value,

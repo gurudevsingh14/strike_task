@@ -7,7 +7,7 @@ class CustomTextField extends StatefulWidget {
   String? label;
   TextEditingController? textController;
   String? Function(String?)? validator;
-  CustomTextField({this.label,required this.textController,this.validator});
+  CustomTextField({this.label,this.textController,this.validator});
 
 
   @override
