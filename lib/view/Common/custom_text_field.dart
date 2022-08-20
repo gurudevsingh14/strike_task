@@ -6,7 +6,8 @@ import 'package:strike_task/controller/textfield_controller.dart';
 class CustomTextField extends StatefulWidget {
   String? label;
   TextEditingController? textController;
-  CustomTextField({this.label,required this.textController});
+  String? Function(String?)? validator;
+  CustomTextField({this.label,required this.textController,this.validator});
 
 
   @override
@@ -19,6 +20,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final controller=Provider.of<TextFieldController>(context);
     return TextFormField(
       controller: widget.textController,
+      validator: widget.validator,
       minLines: 1,
       maxLines: 16,
       decoration: InputDecoration(
@@ -37,6 +39,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderSide: BorderSide(
               width: 0.8,
               color: Colors.lightBlue,
+            ),
+            borderRadius: BorderRadius.circular(10)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              width: 0.8,
+              color: Colors.red,
+            ),
+            borderRadius: BorderRadius.circular(10)),
+        errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              width: 0.8,
+              color: Colors.red,
             ),
             borderRadius: BorderRadius.circular(10)),
       ),
