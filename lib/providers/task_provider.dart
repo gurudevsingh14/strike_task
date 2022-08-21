@@ -33,6 +33,8 @@ class TaskProvider extends ChangeNotifier{
     notifyListeners();
   }
   void deletesubTask(TaskModel task,int index){
+    if(task.subTaskList[index].done==true)
+      task.SubTaskDoneCount--;
     task.subTaskList.removeAt(index);
     notifyListeners();
   }

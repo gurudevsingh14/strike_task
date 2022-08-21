@@ -58,7 +58,7 @@ class TaskTile extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
-                        '3/10 subtask completed',
+                          (task!.SubTaskDoneCount).toString()+"/"+(task!.subTaskList.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
                       SizedBox(

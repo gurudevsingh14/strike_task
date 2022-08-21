@@ -152,7 +152,11 @@ class TaskDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 12,),
-              ...taskDataController.selectedTask.subTaskList.map((subTask) => SubTaskTile(subtask: subTask)).toList(),
+              ...taskDataController.selectedTask.subTaskList.asMap().entries.map((entry) {
+                  int idx = entry.key;
+                  SubTask val = entry.value;
+                  return SubTaskTile(subtask: val,index: idx,);
+                }),
             ],
           ),
         ),
