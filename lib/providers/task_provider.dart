@@ -41,4 +41,22 @@ class TaskProvider extends ChangeNotifier{
   int getSubTaskSize() => _selectedTask.subTaskList.length;
   int getSubTaskDoneSize() => _selectedTask.SubTaskDoneCount;
 
+  List<TaskModel> getTaskOnSelectedDate(DateTime date) {
+    int size=taskList.length;
+    int count;
+    bool sameDay(DateTime a,DateTime b){
+      if(a.year==b.year&&a.month==b.month&&a.day==b.day){
+        return true;
+      }
+      return false;
+    }
+    List<TaskModel>temp=[];
+    for(int i=0;i<size;i++) {
+        if(sameDay(taskList[i].dueDate!, date)) {
+          temp.add(taskList[i]);
+        }
+    }
+    return temp;
+  }
+
 }

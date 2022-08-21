@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/table_calendar_controller.dart';
 import 'package:strike_task/model/sub_task_model.dart';
+import 'package:strike_task/providers/task_provider.dart';
+import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../model/task_model.dart';
@@ -16,7 +18,6 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   late Map<DateTime,List<TaskModel>>selectedTasks;
-
   @override
   void initState() {
     selectedTasks={DateTime.now():[]};
@@ -27,48 +28,66 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    final taskDataController = Provider.of<TaskProvider>(context);
     final controller = Provider.of<TableCalendarController>(context);
-    return Column(
-      children: [
-      TableCalendar(
-        calendarFormat: controller.calendarFormat,
-        focusedDay: controller.focusedDay,
-        firstDay: DateTime.now(),
-        lastDay: DateTime(DateTime.now().year + 10),
-        selectedDayPredicate: (day) {
-          return isSameDay(controller.selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(controller.selectedDay, selectedDay)) {
-            controller.selectedDay = selectedDay;
+    return Scaffold(
+      body: Column(
+        children: [
+        TableCalendar(
+          calendarFormat: controller.calendarFormat,
+          focusedDay: controller.focusedDay,
+          firstDay: DateTime.now(),
+          lastDay: DateTime(DateTime.now().year + 10),
+          selectedDayPredicate: (day) {
+            return isSameDay(controller.selectedDay, day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            if (!isSameDay(controller.selectedDay, selectedDay)) {
+              controller.selectedDay = selectedDay;
+              controller.focusedDay = focusedDay;
+            }
+            setState((){});
+          },
+          onFormatChanged: (format){
+            if(controller.calendarFormat!=format)
+            {
+              controller.calendarFormat=format;
+            }
+          },
+          onPageChanged: (focusedDay) {
             controller.focusedDay = focusedDay;
-          }
-          setState((){});
-        },
-        onFormatChanged: (format){
-          if(controller.calendarFormat!=format)
-          {
-            controller.calendarFormat=format;
-          }
-        },
-        onPageChanged: (focusedDay) {
-          controller.focusedDay = focusedDay;
-        },
-        calendarStyle: CalendarStyle(
-          rangeHighlightColor: primaryColor,
-          selectedDecoration: BoxDecoration(color: primaryColor,shape: BoxShape.circle),
-          todayDecoration: BoxDecoration(color: primaryColor.withOpacity(0.4),shape:  BoxShape.circle),
-          outsideDaysVisible: false,
+          },
+          calendarStyle: CalendarStyle(
+            rangeHighlightColor: primaryColor,
+            selectedDecoration: BoxDecoration(color: primaryColor,shape: BoxShape.circle),
+            todayDecoration: BoxDecoration(color: primaryColor.withOpacity(0.4),shape:  BoxShape.circle),
+            outsideDaysVisible: false,
+          ),
+          headerStyle: HeaderStyle(
+            // formatButtonVisible: true,
+            formatButtonShowsNext: false,
+            titleCentered: true,
+          ),
+          eventLoader: _getTasksOnSelectedDay,
         ),
-        headerStyle: HeaderStyle(
-          // formatButtonVisible: true,
-          formatButtonShowsNext: false,
-          titleCentered: true,
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 15),
+            decoration: BoxDecoration(
+              color: primayLightColor.withOpacity(0.4),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20)),
+            ),
+            child: ListView(
+            children: [
+            ...taskDataController.getTaskOnSelectedDate(controller.selectedDay).map((e) => TaskTile(task: e,)),
+            ],
+            ),
+          ),
         ),
-        eventLoader: _getTasksOnSelectedDay,
+        ]
       ),
-        ..._getTasksOnSelectedDay(DateTime.now()).map((value) => Column(children: [SubTaskTile(subtask: SubTask(),)],)).toList()
-      ]
     );
   }
 }
