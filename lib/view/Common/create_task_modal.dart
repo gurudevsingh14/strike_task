@@ -112,15 +112,31 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                           )),
                       Flexible(flex: 6, child: AddButton(text: 'Add category',onPressed: (){
                         showDialog(context: context, builder: (context) {
-                          return AlertDialog(
-                            title: CustomTextField(label: "Enter Category",textController: addCategoryController,),
-                            actions: [
-                              TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
-                              TextButton(onPressed: (){
-                                categoryController.addcategory(addCategoryController.text);
-                                Navigator.pop(context);
-                              }, child: Text('Ok'),)
-                            ],);
+                          final formKey=GlobalKey<FormState>();
+                          return Form(
+                            key: formKey,
+                            child: AlertDialog(
+                              title: CustomTextField(
+                                label: "Enter Category",
+                                textController: addCategoryController,
+                                validator: (value){
+                                  if(value!.isEmpty){
+                                    return "Enter category";
+                                  }
+                                  return  null;
+                                },
+                              ),
+                              actions: [
+                                TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
+                                TextButton(onPressed: (){
+                                  if(formKey.currentState!.validate()) {
+                                    categoryController.addcategory(addCategoryController.text);
+                                    addCategoryController.text="";
+                                    Navigator.pop(context);
+                                  }
+                                }, child: Text('Ok'),)
+                              ],),
+                          );
                         },);
                       },)),
                     ],

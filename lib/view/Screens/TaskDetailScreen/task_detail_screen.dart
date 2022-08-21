@@ -121,15 +121,31 @@ class TaskDetailScreen extends StatelessWidget {
                     text: 'Add subtask',
                     onPressed: (){
                       showDialog(context: context, builder: (context) {
-                        return AlertDialog(
-                          title: CustomTextField(textController: subTaskController,label: 'Sub Task'),
-                          actions: [
-                          TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
-                          TextButton(onPressed: (){
-                            taskDataController.addSubTask(taskDataController.selectedTask, SubTask(text:subTaskController.text));
-                            Navigator.pop(context);
-                          }, child: Text('Ok'),)
-                        ],);
+                        final formKey=GlobalKey<FormState>();
+                        return Form(
+                          key: formKey,
+                          child: AlertDialog(
+                            title: CustomTextField(
+                              label: "Sub task",
+                              textController: subTaskController,
+                              validator: (value){
+                                if(value!.isEmpty){
+                                  return "Enter sub task";
+                                }
+                                return  null;
+                              },
+                            ),
+                            actions: [
+                              TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
+                              TextButton(onPressed: (){
+                                if(formKey.currentState!.validate()) {
+                                  taskDataController.addSubTask(taskDataController.selectedTask, SubTask(text: subTaskController.text));
+                                  subTaskController.text="";
+                                  Navigator.pop(context);
+                                }
+                              }, child: Text('Ok'),)
+                            ],),
+                        );
                       },);
                     },
                   ),

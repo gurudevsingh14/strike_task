@@ -20,7 +20,7 @@ class PercentageIndicator extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              ((percentage??0)*100).toStringAsFixed(0)+" %",
+              ((percentage??0)*100).toStringAsFixed(1)+" %",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             // Text(
