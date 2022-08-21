@@ -10,6 +10,7 @@ class TaskModel{
   String? description;
   DateTime? dueDate;
   String? priority;
+  int SubTaskDoneCount=0;
   List<SubTask> subTaskList=[];
 
   TaskModel({this.id, this.name, this.category, this.description, this.dueDate,

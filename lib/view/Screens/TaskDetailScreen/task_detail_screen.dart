@@ -9,6 +9,7 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/add_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
+import 'package:strike_task/view/Screens/TaskDetailScreen/components/percentage_indicator.dart';
 
 import '../../../model/sub_task_model.dart';
 import 'components/sub_task_tile.dart';
@@ -52,29 +53,11 @@ class TaskDetailScreen extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.all(1),
-                    child: CircularPercentIndicator(
+                    child: PercentageIndicator(
                       radius: indicatorRadius,
                       lineWidth: 9.0,
-                      animation: true,
-                      percent: 0.8,
-                      center: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "70.0%",
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold, fontSize: 14.0),
-                            ),
-                            Text('Done',style: TextStyle(color: textColor,fontSize: 12),)
-                          ],
-                        ),
-                      ),
-                      rotateLinearGradient: true,
-                      circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Colors.blue,
-                    ),
+                      percentage: taskDataController.getSubTaskDoneSize()/taskDataController.getSubTaskSize(),
+                    )
                   ),
                   Container(
                     height: indicatorRadius*2,

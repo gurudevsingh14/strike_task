@@ -7,6 +7,7 @@ import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
+import 'package:strike_task/view/Common/percentage_indicator.dart';
 
 import '../../constants/device_size.dart';
 import '../../model/priority.dart';
@@ -83,19 +84,10 @@ class TaskTile extends StatelessWidget {
                   Container(
                     width: 100,
                     height: 80,
-                    child: CircularPercentIndicator(
+                    child: PercentageIndicator(
                       radius: 33.0,
-                      lineWidth: 8.0,
-                      animation: true,
-                      percent: 0.8,
-                      center: new Text(
-                        "70.0%",
-                        style: new TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 14.0),
-                      ),
-                      rotateLinearGradient: true,
-                      circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Colors.blue,
+                      lineWidth: 6.0,
+                      percentage: (task!.SubTaskDoneCount)/(task!.subTaskList.length),
                     ),
                   ),
                 ],

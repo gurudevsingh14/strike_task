@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/model/menu_item_model.dart';
 import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/providers/task_provider.dart';
 
 import '../../../../constants/menu_items.dart';
 import '../../../../model/sub_task_model.dart';
@@ -18,6 +20,7 @@ class SubTaskTile extends StatefulWidget {
 class _SubTaskTileState extends State<SubTaskTile> {
   @override
   Widget build(BuildContext context) {
+    final taskDataController=Provider.of<TaskProvider>(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10)
@@ -30,7 +33,16 @@ class _SubTaskTileState extends State<SubTaskTile> {
           children: [
             Checkbox(value: widget.subtask.done, onChanged: (value){
               setState(() {
-                widget.subtask.done=value!;
+                if(widget.subtask.done==false){
+                  widget.subtask.done=value!;
+                  taskDataController.selectedTask.SubTaskDoneCount++;
+                  taskDataController.notifyListeners();
+                }
+                else{
+                  widget.subtask.done=value!;
+                  taskDataController.selectedTask.SubTaskDoneCount--;
+                  taskDataController.notifyListeners();
+                }
               });
             }),
             Text(widget.subtask.text!),
