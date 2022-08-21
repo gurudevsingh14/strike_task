@@ -40,4 +40,5 @@ class TaskProvider extends ChangeNotifier{
   }
   int getSubTaskSize() => _selectedTask.subTaskList.length;
   int getSubTaskDoneSize() => _selectedTask.SubTaskDoneCount;
+
 }

@@ -72,21 +72,21 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.green.shade300),
-                              child: Text('12',style: TextStyle(color: whiteColor),),
+                              child: Text((taskDataController.selectedTask.SubTaskDoneCount).toString(),style: TextStyle(color: whiteColor),),
                             )
                           ],
                         ),
-                        Row(
-                          children: [
-                            Text('Due Date Passed',style: TextStyle(color: textColor)),
-                            SizedBox(width: 8,),
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.blue.shade300),
-                              child: Text('12',style: TextStyle(color: whiteColor)),
-                            )
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Text('Due Date Passed',style: TextStyle(color: textColor)),
+                        //     SizedBox(width: 8,),
+                        //     Container(
+                        //       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
+                        //       decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.blue.shade300),
+                        //       child: Text('12',style: TextStyle(color: whiteColor)),
+                        //     )
+                        //   ],
+                        // ),
                         Row(
                           children: [
                             Text('Pending',style: TextStyle(color: textColor)),
@@ -94,7 +94,7 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.yellow.shade300),
-                              child: Text('12',style: TextStyle(color: whiteColor)),
+                              child: Text((taskDataController.selectedTask.subTaskList.length-taskDataController.selectedTask.SubTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
                             )
                           ],
                         ),
