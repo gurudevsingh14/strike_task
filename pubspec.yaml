@@ -41,6 +41,7 @@ dependencies:
   age_calculator: ^1.0.0
   flutter_slidable: ^2.0.0
   uuid: ^3.0.6
+  flutter_svg: ^0.18.0
 
 dev_dependencies:
   flutter_test:

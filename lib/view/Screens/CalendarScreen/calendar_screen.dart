@@ -79,11 +79,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20)),
             ),
-            child: ListView(
+            child: taskDataController.taskList.length!=0?ListView(
             children: [
             ...taskDataController.getTaskOnSelectedDate(controller.selectedDay).map((e) => TaskTile(task: e,)),
             ],
-            ),
+            ):
+            Column(
+                children: [
+                  Container(
+                      height: 180,
+                      alignment: Alignment.center,
+                      child: Image.asset('assets/images/noTask.png',fit: BoxFit.cover,)),
+                  SizedBox(height: 8,),
+                  Text('Add Task',style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),)
+                ]),
           ),
         ),
         ]

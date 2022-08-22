@@ -83,18 +83,26 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         '  Tasks',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Expanded(
+                    taskDataController.taskList.length!=0?Expanded(
                       child: ListView.builder(
                         itemCount: taskDataController.taskList.length,
                         itemBuilder: (context, index) => TaskTile(
                           task: taskDataController.taskList[index],
                         ),
                       ),
-                    ),
+                    ):
+                    Column(
+                      children: [
+                        Container(
+                        height: 180,
+                          alignment: Alignment.center,
+                          child: Image.asset('assets/images/noTask.png',fit: BoxFit.cover,)),
+                        SizedBox(height: 8,),
+                        Text('Add Task',style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),)
+                    ]),
                   ],
                 ),
               ))
