@@ -1,6 +1,10 @@
+// import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
+import 'package:strike_task/controller/screen_controller.dart';
+import 'package:strike_task/controller/table_calendar_controller.dart';
 
 import '../../constants/constants.dart';
 
@@ -9,13 +13,18 @@ class DatePickerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller= Provider.of<DateTimeController>(context);
+    final screenController= Provider.of<ScreenController>(context);
+    final tableCalenderController=Provider.of<TableCalendarController>(context);
     DateTime selectedDate=controller.selectedDate;
+    if(screenController.currScreen==1){
+      selectedDate=tableCalenderController.selectedDay;
+    }
     return SizedBox(
       height: 50,
       child: InkWell(
         onTap: (){
           showDatePicker(context: context, 
-              initialDate: DateTime.now(),
+              initialDate: screenController.currScreen==1?tableCalenderController.selectedDay:DateTime.now(),
               firstDate: DateTime.now(),
               lastDate: DateTime(selectedDate.year+10),
           ).then((value) {

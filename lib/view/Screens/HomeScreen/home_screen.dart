@@ -18,62 +18,61 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskDataController = Provider.of<TaskProvider>(context);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Hey Gurudev',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: primayDarkColor),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text('lets be productive today')
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: CircleAvatar(
-                    radius: 35,
-                    backgroundImage: AssetImage('assets/images/dp.jpg'),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Hey Gurudev',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: primayDarkColor),
                   ),
-                )
-              ],
-            ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Text('lets be productive today')
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: CircleAvatar(
+                  radius: 35,
+                  backgroundImage: AssetImage('assets/images/dp.jpg'),
+                ),
+              )
+            ],
           ),
-          Container(
-              width: displayWidth(context),
-              height: displayHeight(context) * 0.29,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  itemBuilder: (BuildContext, index) {
-                    return Column(
-                      children: [
-                        CategoryCard(),
-                      ],
-                    );
-                  })),
-          Container(
+        ),
+        Container(
+            width: displayWidth(context),
+            height: displayHeight(context) * 0.29,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                itemBuilder: (BuildContext, index) {
+                  return Column(
+                    children: [
+                      CategoryCard(),
+                    ],
+                  );
+                })),
+        Expanded(
+          child: Container(
               decoration: BoxDecoration(
                 color: primayLightColor.withOpacity(0.4),
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25)),
               ),
-              height: displayHeight(context) * 0.6,
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
@@ -105,9 +104,9 @@ class HomeScreen extends StatelessWidget {
                     ]),
                   ],
                 ),
-              ))
-        ],
-      ),
+              )),
+        )
+      ],
     );
   }
 }
