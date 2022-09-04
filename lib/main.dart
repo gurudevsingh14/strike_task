@@ -40,6 +40,8 @@ class MyApp extends StatelessWidget {
         },
         theme: ThemeData(
           fontFamily: lato,
+          bottomSheetTheme: BottomSheetThemeData(
+              backgroundColor: Colors.black.withOpacity(0)),
         ),
         debugShowCheckedModeBanner: false,
         home: BodyWithAppBar(),

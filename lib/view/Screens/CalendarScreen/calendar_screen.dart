@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/controller/table_calendar_controller.dart';
 import 'package:strike_task/model/sub_task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
@@ -30,6 +31,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     final taskDataController = Provider.of<TaskProvider>(context);
     final controller = Provider.of<TableCalendarController>(context);
+    final dateTimeController = Provider.of<DateTimeController>(context);
     return Scaffold(
       body: Column(
         children: [
@@ -45,6 +47,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             if (!isSameDay(controller.selectedDay, selectedDay)) {
               controller.selectedDay = selectedDay;
               controller.focusedDay = focusedDay;
+              dateTimeController.selectedDate=focusedDay;
             }
             setState((){});
           },
