@@ -12,7 +12,15 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Image.asset('assets/images/user-profile-bg.jpg'),
+      body: Stack(
+        children: [
+          Image.asset('assets/images/user-profile-bg.jpg'),
+          Positioned(
+            top: 10,
+              left: 10,
+              child: CircleAvatar(backgroundColor: primaryColor,radius:23,child: IconButton(color: Colors.white,highlightColor: Colors.black45,onPressed: (){Navigator.pop(context);}, icon: Icon(Icons.arrow_back_outlined))))
+        ],
+      ),
       bottomSheet: Container(
         color: Colors.transparent,
         alignment: Alignment.bottomCenter,

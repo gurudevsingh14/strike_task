@@ -11,7 +11,10 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/create_task_modal.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
+import 'package:strike_task/view/Screens/AuthScreens/login_screen.dart';
+import 'package:strike_task/view/Screens/AuthScreens/register_screen.dart';
 import 'package:strike_task/view/Screens/HomeScreen/home_screen.dart';
+import 'package:strike_task/view/Screens/AuthScreens/login_screen.dart';
 import 'package:strike_task/view/Screens/TaskDetailScreen/task_detail_screen.dart';
 import 'package:strike_task/view/Common/create_task_modal.dart';
 
@@ -35,8 +38,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
+          '/HomeScreen' : (context) => BodyWithAppBar(),
           '/TaskDetail' : (context) =>TaskDetailScreen(),
-          '/CreateTask' : (context) => CreateTaskModal()
+          '/CreateTask' : (context) => CreateTaskModal(),
+          '/RegisterScreen' : (context) => RegisterScreen(),
+          '/LoginScreen' : (context) => LoginScreen(),
         },
         theme: ThemeData(
           fontFamily: lato,
@@ -44,7 +50,7 @@ class MyApp extends StatelessWidget {
               backgroundColor: Colors.black.withOpacity(0)),
         ),
         debugShowCheckedModeBanner: false,
-        home: BodyWithAppBar(),
+        home: LoginScreen(),
       ),
     );
   }

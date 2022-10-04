@@ -55,11 +55,10 @@ class BodyWithAppBar extends StatelessWidget {
             ),
             PandaBarButtonData(
                 id: 2,
-                icon: Icons.category,
-                title: 'Category'
+                icon: Icons.timeline_outlined,
+                title: 'TimeLine'
             ),
             PandaBarButtonData(
-
                 id: 3,
                 icon: Icons.person,
                 title: 'Profile'
