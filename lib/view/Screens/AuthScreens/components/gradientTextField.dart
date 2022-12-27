@@ -9,9 +9,10 @@ class GradientTextField extends StatefulWidget {
   String? hintText;
   double? width;
   Icon? icon;
+  bool obsureText;
   TextEditingController? textController;
   String? Function(String?)? validator;
-  GradientTextField({this.hintText,this.textController,this.validator,this.width,this.icon});
+  GradientTextField({this.hintText,this.textController,this.validator,this.width,this.icon,this.obsureText=false});
 
 
   @override
@@ -30,11 +31,12 @@ class _GradientTextFieldState extends State<GradientTextField> {
         borderRadius: BorderRadius.all(Radius.circular(10))
       ),
       child: TextFormField(
+        obscureText: widget.obsureText,
         style: TextStyle(decoration: TextDecoration.none,),
         controller: widget.textController,
         validator: widget.validator,
         minLines: 1,
-        maxLines: 16,
+        maxLines: widget.obsureText?1:5,
         decoration: InputDecoration(
           filled: true,
           prefixIcon: widget.icon,

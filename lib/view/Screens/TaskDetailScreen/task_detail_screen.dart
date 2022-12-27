@@ -72,7 +72,7 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.green.shade300),
-                              child: Text((taskDataController.selectedTask.SubTaskDoneCount).toString(),style: TextStyle(color: whiteColor),),
+                              child: Text((taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor),),
                             )
                           ],
                         ),
@@ -94,7 +94,7 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.yellow.shade300),
-                              child: Text((taskDataController.selectedTask.subTaskList.length-taskDataController.selectedTask.SubTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
+                              child: Text((taskDataController.selectedTask.subTaskList!.length-taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
                             )
                           ],
                         ),
@@ -152,7 +152,7 @@ class TaskDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 12,),
-              ...taskDataController.selectedTask.subTaskList.asMap().entries.map((entry) {
+              ...taskDataController.selectedTask.subTaskList!.asMap().entries.map((entry) {
                   int idx = entry.key;
                   SubTask val = entry.value;
                   return SubTaskTile(subtask: val,index: idx,);

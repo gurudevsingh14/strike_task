@@ -43,12 +43,12 @@ class _SubTaskTileState extends State<SubTaskTile> {
                   setState(() {
                     if(widget.subtask.done==false){
                       widget.subtask.done=value!;
-                      taskDataController.selectedTask.SubTaskDoneCount++;
+                      taskDataController.selectedTask.subTaskDoneCount++;
                       taskDataController.notifyListeners();
                     }
                     else{
                       widget.subtask.done=value!;
-                      taskDataController.selectedTask.SubTaskDoneCount--;
+                      taskDataController.selectedTask.subTaskDoneCount--;
                       taskDataController.notifyListeners();
                     }
                   });

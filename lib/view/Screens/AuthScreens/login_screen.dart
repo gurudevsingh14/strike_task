@@ -1,15 +1,28 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/model/user_model.dart';
+import 'package:strike_task/providers/user_provider.dart';
+import 'package:strike_task/services/auth_services/auth_service.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Screens/AuthScreens/components/gradientTextField.dart';
 
 import '../../../constants/constants.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController email=TextEditingController();
+
+  TextEditingController password=TextEditingController();
+  bool loadScreen = false;
   @override
   Widget build(BuildContext context) {
+    AuthService _auth=AuthService(FirebaseAuth.instance,context);
+    UserProvider userProvider=UserProvider();
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -55,9 +68,9 @@ class LoginScreen extends StatelessWidget {
                         }),
                       ],),
                       SizedBox(height: displayHeight(context)*0.05,),
-                      GradientTextField(hintText: "Email",icon: Icon(Icons.email,color: primaryColor,)),
+                      GradientTextField(hintText: "Email",icon: Icon(Icons.email,color: primaryColor,),textController: email),
                       SizedBox(height: 20,),
-                      GradientTextField(hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,)),
+                      GradientTextField(hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,),textController: password,obsureText: true,),
                       SizedBox(height: 5,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -67,7 +80,11 @@ class LoginScreen extends StatelessWidget {
                             "Forgot Password?",style: TextStyle(color: whiteColor),
                           ),
                         )],
-                      )
+                      ),
+                      (loadScreen)
+                          ? const Center(
+                        child: CircularProgressIndicator(),
+                      ):SizedBox(),
                     ],
                   ),
                 ),
@@ -80,6 +97,27 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CustomRoundRectButton(
+                callBack: () async {
+                  setState(() {
+                    loadScreen=true;
+                  });
+                  var response=await _auth.signIn(email: email.text, password: password.text);
+                  if(response=="valid") {
+                    String? res=await userProvider.setUser(_auth.getAuth().currentUser!.uid);
+                    if(res=="successful"){
+                      Navigator.pushReplacementNamed(context, "/HomeScreen");
+                    } else if(res=="unsuccessful"){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("check connection!!try again")));
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res!)));
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("invalid")));
+                    setState(() {
+                      loadScreen=false;
+                    });
+                  }
+                },
                 fontSize: 16,
                 text: "Login",
                 width: displayWidth(context)*0.85,

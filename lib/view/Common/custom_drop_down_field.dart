@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/controller/category_controller.dart';
+import 'package:strike_task/model/categories.dart';
 
 import '../../constants/category_list.dart';
 import '../../constants/constants.dart';
@@ -54,11 +55,11 @@ class CustomDropDownField extends StatelessWidget {
         categoryController.selectedCategory=newValue;
       },
       items: categoryList
-          .map<DropdownMenuItem<String>>((String value) {
+          .map<DropdownMenuItem<String>>((TaskCategory value) {
         return DropdownMenuItem(
-          value: value,
+          value: value.name,
           child: Text(
-            value,
+            value.name,
             overflow: TextOverflow.ellipsis,
           ),
           enabled: true,

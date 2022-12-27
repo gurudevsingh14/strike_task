@@ -1,16 +1,18 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
-
+  ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final user=Provider.of<UserProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -60,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      "Gurudev Singh",
+                      user.currentUser.uid??"ghg",
                       style: TextStyle(
                           fontSize: 24,
                           overflow: TextOverflow.ellipsis,
@@ -182,9 +184,9 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 Spacer(),
                                 PercentageIndicator(
-                                  radius: displayWidth(context)*0.12,
+                                  radius: displayWidth(context)*0.11,
                                   percentage: 0.7,
-                                  lineWidth: 10,
+                                  lineWidth: 8,
                                 ),
                                 SizedBox(width: 20,),
                               ],

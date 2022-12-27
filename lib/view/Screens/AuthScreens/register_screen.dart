@@ -1,15 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/model/user_model.dart';
+import 'package:strike_task/providers/user_provider.dart';
+import 'package:strike_task/services/auth_services/auth_service.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Screens/AuthScreens/components/gradientTextField.dart';
-
+import 'package:strike_task/model/user_model.dart';
 import '../../../constants/constants.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController name=TextEditingController();
+  TextEditingController email=TextEditingController();
+  TextEditingController password=TextEditingController();
+  TextEditingController confirmPassword=TextEditingController();
+  bool loadScreen=false;
+  @override
   Widget build(BuildContext context) {
+    AuthService _auth=AuthService(FirebaseAuth.instance, context);
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -47,14 +63,18 @@ class RegisterScreen extends StatelessWidget {
                       Text("Create your account", style: TextStyle(color: whiteColor,fontSize: 14),),
                       SizedBox(height: displayHeight(context)*0.03,),
                       // SizedBox(height: 20,),
-                      GradientTextField(hintText: "Name",icon: Icon(Icons.person,color: primaryColor,)),
+                      GradientTextField(hintText: "Name",icon: Icon(Icons.person,color: primaryColor,),textController: name),
                       SizedBox(height: 20,),
-                      GradientTextField(hintText: "Email",icon: Icon(Icons.email,color: primaryColor,)),
+                      GradientTextField(hintText: "Email",icon: Icon(Icons.email,color: primaryColor,),textController: email,),
                       SizedBox(height: 20,),
-                      GradientTextField(hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,)),
+                      GradientTextField(hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,),obsureText: true,textController: password,),
                       SizedBox(height: 20,),
-                      GradientTextField(hintText: "Confirm Password",icon: Icon(Icons.lock,color: primaryColor,)),
+                      GradientTextField(hintText: "Confirm Password",icon: Icon(Icons.lock,color: primaryColor,),obsureText: true,textController: confirmPassword,),
                       SizedBox(height: 5,),
+                      (loadScreen)
+                          ? const Center(
+                        child: CircularProgressIndicator(),
+                      ):SizedBox(),
                     ],
                   ),
                 ),
@@ -67,6 +87,30 @@ class RegisterScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               CustomRoundRectButton(
+                callBack: () async {
+                  setState(() {
+                    loadScreen=true;
+                  });
+                  if(password.text==confirmPassword.text) {
+                    String? response=await _auth.signUp(name: name.text, email: email.text, password: password.text);
+                    if(response=="valid") {
+                      UserModel user=UserModel(name: name.text,email: email.text,uid: _auth.getAuth().currentUser!.uid);
+                      String? res= await UserProvider().registerUser(user);
+                      if(res=="successful"){
+                        Navigator.pushReplacementNamed(context, "/HomeScreen");
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong! try again..")));
+                      }
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Something went wrong! try again..")));
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("password did not matched")));
+                  }
+                  setState(() {
+                    loadScreen=false;
+                  });
+                },
                 fontSize: 16,
                 text: "Register",
                 width: displayWidth(context)*0.85,

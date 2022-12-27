@@ -18,13 +18,13 @@ class CalendarScreen extends StatefulWidget {
 }
 
 class _CalendarScreenState extends State<CalendarScreen> {
-  late Map<DateTime,List<TaskModel>>selectedTasks;
+  late Map<DateTime,List<Task>>selectedTasks;
   @override
   void initState() {
     selectedTasks={DateTime.now():[]};
     super.initState();
   }
-  List<TaskModel> _getTasksOnSelectedDay(DateTime date) {
+  List<Task> _getTasksOnSelectedDay(DateTime date) {
     return selectedTasks[date]??[];
   }
   @override

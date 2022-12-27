@@ -15,6 +15,7 @@ import 'package:strike_task/view/Common/date_picker_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 import 'package:uuid/uuid.dart';
 import '../../controller/priority_select_controller.dart';
+import '../../model/categories.dart';
 
 class CreateTaskModal extends StatefulWidget {
   @override
@@ -130,7 +131,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                                 TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
                                 TextButton(onPressed: (){
                                   if(formKey.currentState!.validate()) {
-                                    categoryController.addcategory(addCategoryController.text);
+                                    categoryController.addcategory(TaskCategory(name: addCategoryController.text));
                                     addCategoryController.text="";
                                     Navigator.pop(context);
                                   }
@@ -230,10 +231,10 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
         fontSize: 18,
         callBack: () {
           if(_formKey.currentState!.validate()){
-            taskController.addTask(TaskModel(
+            taskController.addTask(Task(
                 id: uuid.v1(),
                 name: taskNameController.text,
-                category: categoryController.selectedCategory,
+                category: TaskCategory(name: categoryController.selectedCategory??""),
                 description: descriptionController.text,
                 dueDate: dueDateController.selectedDate,
                 priority: priorityController.text));
