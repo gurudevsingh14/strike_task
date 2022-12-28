@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:strike_task/model/categories.dart';
 
 import '../constants/category_list.dart';
 
@@ -11,7 +12,7 @@ class CategoryController extends ChangeNotifier{
     _selectedCategory = value;
     notifyListeners();
   }
-  void addcategory(String value){
+  void addcategory(TaskCategory value){
     categoryList.add(value);
     notifyListeners();
   }

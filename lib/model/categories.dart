@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Categories{
-  String? name;
-
+class TaskCategory{
+  String name;
+  TaskCategory({required this.name});
 }

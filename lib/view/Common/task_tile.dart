@@ -15,7 +15,7 @@ import '../../model/task_model.dart';
 import '../../providers/task_provider.dart';
 
 class TaskTile extends StatelessWidget {
-  TaskModel? task;
+  Task? task;
   TaskTile({this.task});
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class TaskTile extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
-                          (task!.SubTaskDoneCount).toString()+"/"+(task!.subTaskList.length).toString()+" subtask completed",
+                          (task!.subTaskDoneCount).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
                       SizedBox(
@@ -87,7 +87,7 @@ class TaskTile extends StatelessWidget {
                     child: PercentageIndicator(
                       radius: 33.0,
                       lineWidth: 6.0,
-                      percentage: (task!.SubTaskDoneCount)/(task!.subTaskList.length),
+                      percentage: (task!.subTaskDoneCount)/(task!.subTaskList!.length),
                     ),
                   ),
                 ],
