@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/model/user_model.dart';
 import 'package:strike_task/providers/user_provider.dart';
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     AuthService _auth=AuthService(FirebaseAuth.instance,context);
-    UserProvider userProvider=UserProvider();
+    UserProvider userProvider=Provider.of<UserProvider>(context);
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
