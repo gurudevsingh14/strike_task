@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/main.dart';
 import 'package:strike_task/model/user_model.dart';
 import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/services/auth_services/auth_service.dart';
@@ -106,6 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if(response=="valid") {
                     String? res=await userProvider.setUser(_auth.getAuth().currentUser!.uid);
                     if(res=="successful"){
+                      await setPref(true);
                       Navigator.pushReplacementNamed(context, "/HomeScreen");
                     } else if(res=="unsuccessful"){
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("check connection!!try again")));

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/controller/category_controller.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
@@ -12,6 +13,7 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/create_task_modal.dart';
+import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/custom_text_field.dart';
 import 'package:strike_task/view/Screens/AuthScreens/login_screen.dart';
 import 'package:strike_task/view/Screens/AuthScreens/register_screen.dart';
@@ -20,16 +22,22 @@ import 'package:strike_task/view/Screens/AuthScreens/login_screen.dart';
 import 'package:strike_task/view/Screens/TaskDetailScreen/task_detail_screen.dart';
 import 'package:strike_task/view/Common/create_task_modal.dart';
 
+import 'constants/device_size.dart';
 import 'constants/global_context.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // this is root of the app
-  runApp(MyApp());
+  runApp(StrikeTask());
 }
 
-class MyApp extends StatelessWidget {
+class StrikeTask extends StatefulWidget {
+  @override
+  State<StrikeTask> createState() => _StrikeTaskState();
+}
+
+class _StrikeTaskState extends State<StrikeTask> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -45,6 +53,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         routes: {
+          '/StrikeTask' : (context) => StrikeTask(),
           '/HomeScreen' : (context) => BodyWithAppBar(),
           '/TaskDetail' : (context) =>TaskDetailScreen(),
           '/CreateTask' : (context) => CreateTaskModal(),
@@ -58,8 +67,48 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         navigatorKey: GlobalContext.contextKey,
-        home: LoginScreen(),
+        home: FutureBuilder(
+          future: getPref(),
+          builder: (context, AsyncSnapshot<bool> snapshot) {
+            if(snapshot.connectionState==ConnectionState.active||snapshot.connectionState==ConnectionState.done){
+              if(snapshot.hasData){
+                if(snapshot.data!)
+                  return BodyWithAppBar();
+                else return LoginScreen();
+              } else return LoginScreen();
+            } else return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/no_internet.png',width: displayWidth(context)*0.8,fit: BoxFit.contain),
+                  Text('OOPS! No Internet Connect!!..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                  SizedBox(height: 5,),
+                  Text('try after connecting to internet'),SizedBox(height: 15,),
+                  Center(child: CustomRoundRectButton(text: 'Try Again', height: 30,width: displayWidth(context)*0.35,
+                    callBack: () {
+                      setState(() {});
+                    },
+                  ),)
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
+}
+
+Future<bool> getPref() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = false;
+  if(prefs.containsKey('login')){
+    isLoggedIn = prefs.getBool('login')!;
+  }
+  return isLoggedIn;
+}
+
+Future<void> setPref(bool val) async{
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('login', val);
 }
