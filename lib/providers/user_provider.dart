@@ -37,9 +37,9 @@ class UserProvider extends ChangeNotifier {
   Future<String?> setUser(String uid) async {
     try {
       dynamic response =
-          await GetApiService().service(endpoint: "users/${uid}");
+          await GetApiService().service(endpoint: "users/${uid}.json");
       if (response != null) {
-        currentUser = UserModel.fromJson(response.data);
+        currentUser = UserModel.fromJson(response);
         _profileStatus = ProfileStatus.fetched;
         notifyListeners();
         return "successful";

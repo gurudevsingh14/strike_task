@@ -1,10 +1,13 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/main.dart';
 import 'package:strike_task/providers/user_provider.dart';
+import 'package:strike_task/services/auth_services/auth_service.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
 
@@ -13,6 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+    final _auth = AuthService(FirebaseAuth.instance, context);
     return Scaffold(
       body: Stack(
         children: [
@@ -26,8 +30,10 @@ class ProfileScreen extends StatelessWidget {
                   child: IconButton(
                       color: Colors.white,
                       highlightColor: Colors.black45,
-                      onPressed: () {
-                        Navigator.pop(context);
+                      onPressed: () async {
+                        await setPref(false);
+                        await _auth.signOut();
+                        Navigator.pushReplacementNamed(context, '/LoginScreen');
                       },
                       icon: Icon(Icons.arrow_back_outlined))))
         ],

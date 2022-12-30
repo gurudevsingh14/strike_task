@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/main.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/model/user_model.dart';
 import 'package:strike_task/providers/user_provider.dart';
@@ -163,6 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       String? res = await userProvider
                           .registerUser(user);
                       if (res == "successful") {
+                        await setPref(true);
                         Navigator.pushReplacementNamed(context, "/HomeScreen");
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
