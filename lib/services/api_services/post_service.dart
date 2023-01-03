@@ -19,10 +19,8 @@ class PostService {
       int statusCode = response.statusCode;
       switch (statusCode) {
         case 200:
-          if (dislayMessage!) {
-            ScaffoldMessenger.of(GlobalContext.contextKey.currentContext!)
-                .showSnackBar(SnackBar(content: Text(taskMessage!)));
-          }
+          print("test");
+
           debugPrint('post response : ${response.body.toString()}');
           return json.decode(response.body);
         case 400:

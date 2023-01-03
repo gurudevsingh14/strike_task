@@ -22,6 +22,7 @@ class AuthService{
       } else if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("The account already exists for that email.")));
       }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
       return "invalid";
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,6 +48,7 @@ class AuthService{
         ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("email address is badly formatted")));
       }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
       return "invalid";
     }catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));

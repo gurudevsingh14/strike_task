@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/model/sub_task_model.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
@@ -19,6 +20,7 @@ class TaskTile extends StatelessWidget {
   TaskTile({this.task});
   @override
   Widget build(BuildContext context) {
+    // task!.subTaskList=[SubTask(text: "hi")];
     final taskDataController=Provider.of<TaskProvider>(context);
     return InkWell(
       onTap: () {
@@ -58,6 +60,7 @@ class TaskTile extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
+                          task!.subTaskList==null? "no subtask added":
                           (task!.subTaskDoneCount).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
@@ -87,7 +90,7 @@ class TaskTile extends StatelessWidget {
                     child: PercentageIndicator(
                       radius: 33.0,
                       lineWidth: 6.0,
-                      percentage: (task!.subTaskDoneCount)/(task!.subTaskList!.length),
+                      percentage: task!.subTaskList==null?null:(task!.subTaskDoneCount)/(task!.subTaskList!.length),
                     ),
                   ),
                 ],

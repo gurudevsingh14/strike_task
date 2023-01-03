@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/services/api_services/get_service.dart';
@@ -11,11 +12,9 @@ class UserProvider extends ChangeNotifier {
   ProfileStatus? get getProfileStatus {
     return _profileStatus;
   }
-
   // UserModel get getCurrentUser{
   //   return currentUser??UserModel();
   // }
-
   Future<String>? registerUser(UserModel user) async {
     try {
       dynamic response = await PutService()
@@ -35,6 +34,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   Future<String?> setUser(String uid) async {
+    _profileStatus=ProfileStatus.loading;
     try {
       dynamic response =
           await GetApiService().service(endpoint: "users/${uid}.json");
