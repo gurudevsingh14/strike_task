@@ -77,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      user.currentUser!.name ?? "ghg",
+                      user.currentUser!=null?user.currentUser!.name! : "",
                       style: TextStyle(
                           fontSize: 24,
                           overflow: TextOverflow.ellipsis,

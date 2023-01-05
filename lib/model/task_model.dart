@@ -3,20 +3,19 @@ import 'package:flutter/scheduler.dart';
 import 'package:strike_task/model/priority.dart';
 import 'package:strike_task/model/sub_task_model.dart';
 
-import 'categories.dart';
 
 class Task{
   String? id;
   String? name;
-  TaskCategory category;
+  String? category;
   String? description;
   DateTime? dueDate;
   String? priority;
   int subTaskDoneCount;
-  List<SubTask>? subTaskList=[];
+  List<SubTask>? subTaskList;
 
 
-  Task({this.id, this.name,required this.category, this.description, this.dueDate,
+  Task({this.id, this.name,this.category, this.description, this.dueDate,
       this.priority, this.subTaskList, this.subTaskDoneCount=0});
 
   factory Task.fromJson(Map<String, dynamic> data) {
@@ -25,9 +24,9 @@ class Task{
         name: data['name'],
         category: data['category'],
         description: data['description'],
-        dueDate: data['dueDate'],
+        dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
-        subTaskList: data['subTaskList'],
+        subTaskList: data['subTaskList']??[],
         subTaskDoneCount: data['subTaskDoneCount']
         );
   }
@@ -38,7 +37,7 @@ class Task{
       'name': name,
       'category': category,
       'description': description,
-      'dueDate': dueDate,
+      'dueDate': dueDate.toString(),
       'priority': priority,
       'subTaskList': subTaskList,
       'subTaskDoneCount': subTaskDoneCount

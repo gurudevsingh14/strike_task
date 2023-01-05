@@ -1,32 +1,90 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:strike_task/model/categories.dart';
+import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/model/sub_task_model.dart';
+import 'package:strike_task/services/api_services/delete_service.dart';
+import 'package:strike_task/services/api_services/get_service.dart';
+import 'package:strike_task/services/api_services/post_service.dart';
+import 'package:strike_task/services/api_services/put_service.dart';
+import 'package:strike_task/services/api_services/update_service.dart';
 import '../model/task_model.dart';
 
 class TaskProvider extends ChangeNotifier{
-  Task _selectedTask=Task(category: TaskCategory(name: ""));
+  Task _selectedTask=Task();
 
   Task get selectedTask => _selectedTask;
-
+  TaskFetchStatus taskFetchStatus=TaskFetchStatus.nil;
   set selectedTask(Task value) {
     _selectedTask = value;
     notifyListeners();
   }
 
-  List<Task>_taskList=[];
-
-  List<Task> get taskList => _taskList;
-
-  void addTask(Task task) {
-    taskList.add(task);
+  List<Task>taskList=[];
+  List<SubTask>subTaskList=[];
+  Future<void> fetchTask(String uid)async{
+    taskFetchStatus=TaskFetchStatus.loading;
+    try{
+      dynamic response=await GetApiService().service(endpoint: "tasks/$uid.json");
+      if(response!=null){
+        response.forEach((k,v)=>taskList.add(Task.fromJson(v)));
+      }
+    }catch(e){
+      print(e);
+    }
+    taskFetchStatus=TaskFetchStatus.fetched;
+    debugPrint("-------tasks fetched---------");
     notifyListeners();
   }
-  void deleteTask(Task task) {
-    taskList.remove(task);
+  Future<void> addTask(String uid,Task task) async{
+    try{
+      debugPrint("----------");
+      dynamic response=await PostService().service(endpoint: "tasks/$uid.json",body: task.toJson());
+      if(response!=null){
+       print(response['name']);
+       task.id=response['name'];
+        dynamic res= await UpdateService().service(endpoint: "tasks/$uid/${task.id}.json", body: {
+          'id': task.id
+        });
+        taskList.add(task);
+      }
+    }catch(e){
+      print(e.toString());
+    }
     notifyListeners();
   }
-  void addSubTask(Task task,SubTask subTask){
+  void deleteTask(String uid,Task task) async{
+    try{
+      dynamic response=await DeleteService().service("tasks/$uid/${task.id}.json");
+      if(response==null){
+        taskList.remove(task);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  void addSubTask(String uid,Task task,SubTask subTask)async{
+    try{
+      debugPrint("----------");
+      dynamic response=await PutService().service(endpoint: "tasks/$uid/${task.id}.json",body: {
+        'subTaskList': Map.fromIterable(subTaskList,key: (subTask) => subTask.id,value: (subTask) => subTask,)
+      });
+      if(response!=null){
+        print(response['name']);
+        task.id=response['name'];
+        dynamic res= await UpdateService().service(endpoint: "tasks/$uid/${task.id}.json", body: {
+          'id': task.id
+        });
+        taskList.add(task);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
     task.subTaskList!.add(subTask);
     notifyListeners();
   }
@@ -40,7 +98,7 @@ class TaskProvider extends ChangeNotifier{
     task.subTaskList!.removeAt(index);
     notifyListeners();
   }
-  int getSubTaskSize() => _selectedTask.subTaskList!.length;
+  int getSubTaskSize() => (_selectedTask.subTaskList!=null)?_selectedTask.subTaskList!.length:0;
   int getSubTaskDoneSize() => _selectedTask.subTaskDoneCount;
 
   List<Task> getTaskOnSelectedDate(DateTime date) {
@@ -60,5 +118,4 @@ class TaskProvider extends ChangeNotifier{
     }
     return temp;
   }
-
 }

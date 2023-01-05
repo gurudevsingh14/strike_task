@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
@@ -17,7 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taskDataController = Provider.of<TaskProvider>(context);
+    FirebaseAuth auth=FirebaseAuth.instance;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -85,23 +87,36 @@ class HomeScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),
                       ),
                     ),
-                    taskDataController.taskList.length!=0?Expanded(
-                      child: ListView.builder(
-                        itemCount: taskDataController.taskList.length,
-                        itemBuilder: (context, index) => TaskTile(
-                          task: taskDataController.taskList[index],
-                        ),
-                      ),
-                    ):
-                    Column(
-                      children: [
-                        Container(
-                        height: 180,
-                          alignment: Alignment.center,
-                          child: Image.asset('assets/images/noTask.png',fit: BoxFit.cover,)),
-                        SizedBox(height: 8,),
-                        Text('Add Task',style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),)
-                    ]),
+                    Consumer<TaskProvider>(builder: (context, controller, child) {
+                      if(controller.taskFetchStatus==TaskFetchStatus.nil){
+                        controller.fetchTask(auth.currentUser!.uid);
+                      }
+                      switch(controller.taskFetchStatus)
+                      {
+                        case TaskFetchStatus.nil:
+                          return Center(child: Text('not able to fetch'),);
+                        case TaskFetchStatus.loading:
+                          return Center(child: CircularProgressIndicator(),);
+                        case TaskFetchStatus.fetched:
+                          return  controller.taskList.length!=0?Expanded(
+                            child: ListView.builder(
+                              itemCount: controller.taskList.length,
+                              itemBuilder: (context, index) => TaskTile(
+                                task: controller.taskList[index],
+                              ),
+                            ),
+                          ):
+                          Column(
+                              children: [
+                                Container(
+                                    height: 180,
+                                    alignment: Alignment.center,
+                                    child: Image.asset('assets/images/noTask.png',fit: BoxFit.cover,)),
+                                SizedBox(height: 8,),
+                                Text('Add Task',style: TextStyle(fontSize: 18,color: primayDarkColor,fontWeight: FontWeight.bold),)
+                              ]);
+                      }
+                    },)
                   ],
                 ),
               )),

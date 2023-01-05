@@ -53,7 +53,7 @@ class _SubTaskTileState extends State<SubTaskTile> {
                     }
                   });
                 }),
-                Text(widget.subtask.text!),
+                Text(widget.subtask.name??''),
                 // Expanded(child: Row(
                 //   mainAxisAlignment: MainAxisAlignment.end,
                 //   children: [

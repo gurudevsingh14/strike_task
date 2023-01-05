@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class TaskDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final taskDataController= Provider.of<TaskProvider>(context);
-    DateTime dueDate=taskDataController.selectedTask.dueDate!;
+    DateTime dueDate=taskDataController.selectedTask.dueDate??DateTime.now();
     Color textColor=Colors.grey.shade500;
     double indicatorRadius=50;
     return Scaffold(
@@ -94,7 +95,7 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.yellow.shade300),
-                              child: Text((taskDataController.selectedTask.subTaskList!.length-taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
+                              child: Text((taskDataController.selectedTask.subTaskList??[].length-taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
                             )
                           ],
                         ),
@@ -107,10 +108,10 @@ class TaskDetailScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20,),
-              if(taskDataController.selectedTask.description!.isNotEmpty)...[Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 19,color: textColor),),
+              if(taskDataController.selectedTask.description==null)...[Text('Description',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 19,color: textColor),),
               SizedBox(height: 8,),
-              Text(taskDataController.selectedTask.description!,
-              maxLines: 50,style: TextStyle(color: textColor),),
+              Text(taskDataController.selectedTask.description??"",
+              maxLines: 100,style: TextStyle(color: textColor),),
               SizedBox(height: 16,)],
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +140,7 @@ class TaskDetailScreen extends StatelessWidget {
                               TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
                               TextButton(onPressed: (){
                                 if(formKey.currentState!.validate()) {
-                                  taskDataController.addSubTask(taskDataController.selectedTask, SubTask(text: subTaskController.text));
+                                  taskDataController.addSubTask(FirebaseAuth.instance.currentUser!.uid,taskDataController.selectedTask, SubTask(name: subTaskController.text));
                                   subTaskController.text="";
                                   Navigator.pop(context);
                                 }
@@ -151,12 +152,14 @@ class TaskDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 12,),
-              ...taskDataController.selectedTask.subTaskList!.asMap().entries.map((entry) {
-                  int idx = entry.key;
-                  SubTask val = entry.value;
-                  return SubTaskTile(subtask: val,index: idx,);
-                }),
+              taskDataController.selectedTask.subTaskList==null?SizedBox():
+                  Column(children: [
+                    ...taskDataController.selectedTask.subTaskList!.asMap().entries.map((entry) {
+                      int idx = entry.key;
+                      SubTask val = entry.value;
+                      return SubTaskTile(subtask: val,index: idx,);
+                    }),
+                  ],)
             ],
           ),
         ),

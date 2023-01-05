@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:strike_task/model/task_model.dart';
 
-import 'categories.dart';
-
 class UserModel{
   String? uid;
   String? name;
   String? email;
   List<Task>?taskList;
-  List<TaskCategory>?categoryList;
+  List<String>?categoryList;
   String? dp;
   String? cp;
   UserModel({this.uid,this.name,this.taskList,this.categoryList,this.dp,this.cp, this.email});

@@ -45,6 +45,7 @@ dependencies:
   firebase_auth: ^3.11.2
   http: ^0.13.5
   shared_preferences: ^2.0.15
+  timelines: ^0.1.0
 
 dev_dependencies:
   flutter_test:

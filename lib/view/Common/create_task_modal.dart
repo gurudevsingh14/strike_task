@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
@@ -15,7 +16,6 @@ import 'package:strike_task/view/Common/date_picker_field.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 import 'package:uuid/uuid.dart';
 import '../../controller/priority_select_controller.dart';
-import '../../model/categories.dart';
 
 class CreateTaskModal extends StatefulWidget {
   @override
@@ -131,7 +131,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                                 TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
                                 TextButton(onPressed: (){
                                   if(formKey.currentState!.validate()) {
-                                    categoryController.addcategory(TaskCategory(name: addCategoryController.text));
+                                    categoryController.addcategory(addCategoryController.text);
                                     addCategoryController.text="";
                                     Navigator.pop(context);
                                   }
@@ -229,12 +229,12 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
         width: displayWidth(context)*0.96,
         height: 50,
         fontSize: 18,
-        callBack: () {
+        callBack: () async {
           if(_formKey.currentState!.validate()){
-            taskController.addTask(Task(
+            await taskController.addTask(FirebaseAuth.instance.currentUser!.uid,Task(
                 id: uuid.v1(),
                 name: taskNameController.text,
-                category: TaskCategory(name: categoryController.selectedCategory??""),
+                category: categoryController.selectedCategory,
                 description: descriptionController.text,
                 dueDate: dueDateController.selectedDate,
                 priority: priorityController.text));

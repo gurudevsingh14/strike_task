@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -5,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/constants/priority.dart';
+import 'package:strike_task/model/sub_task_model.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 import 'package:strike_task/view/Common/priority_tag.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
@@ -19,6 +21,7 @@ class TaskTile extends StatelessWidget {
   TaskTile({this.task});
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth= FirebaseAuth.instance;
     final taskDataController=Provider.of<TaskProvider>(context);
     return InkWell(
       onTap: () {
@@ -58,6 +61,7 @@ class TaskTile extends StatelessWidget {
                         height: 8,
                       ),
                       Text(
+                          task!.subTaskList==null? "no subtask added":
                           (task!.subTaskDoneCount).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
@@ -87,7 +91,7 @@ class TaskTile extends StatelessWidget {
                     child: PercentageIndicator(
                       radius: 33.0,
                       lineWidth: 6.0,
-                      percentage: (task!.subTaskDoneCount)/(task!.subTaskList!.length),
+                      percentage: task!.subTaskList==null?null:(task!.subTaskDoneCount)/(task!.subTaskList!.length),
                     ),
                   ),
                 ],
@@ -95,7 +99,6 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           endActionPane: ActionPane(
-
             motion: DrawerMotion(),
             children: [
               SlidableAction(
@@ -109,7 +112,7 @@ class TaskTile extends StatelessWidget {
               ),
               SlidableAction(
                 onPressed: (context) {
-                  taskDataController.deleteTask(task!);
+                  taskDataController.deleteTask(auth.currentUser!.uid,task!);
                 },
                 backgroundColor: Color(0xFF0392CF),
                 foregroundColor: Colors.white,
