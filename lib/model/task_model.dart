@@ -11,12 +11,10 @@ class Task{
   String? description;
   DateTime? dueDate;
   String? priority;
-  int subTaskDoneCount;
   List<SubTask>? subTaskList;
 
-
   Task({this.id, this.name,this.category, this.description, this.dueDate,
-      this.priority, this.subTaskList, this.subTaskDoneCount=0});
+      this.priority, this.subTaskList});
 
   factory Task.fromJson(Map<String, dynamic> data) {
     return Task(
@@ -27,7 +25,6 @@ class Task{
         dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
         subTaskList: data['subTaskList']??[],
-        subTaskDoneCount: data['subTaskDoneCount']
         );
   }
 
@@ -40,7 +37,6 @@ class Task{
       'dueDate': dueDate.toString(),
       'priority': priority,
       'subTaskList': subTaskList,
-      'subTaskDoneCount': subTaskDoneCount
     };
   }
 }

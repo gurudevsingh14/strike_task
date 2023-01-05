@@ -43,12 +43,10 @@ class _SubTaskTileState extends State<SubTaskTile> {
                   setState(() {
                     if(widget.subtask.done==false){
                       widget.subtask.done=value!;
-                      taskDataController.selectedTask.subTaskDoneCount++;
                       taskDataController.notifyListeners();
                     }
                     else{
                       widget.subtask.done=value!;
-                      taskDataController.selectedTask.subTaskDoneCount--;
                       taskDataController.notifyListeners();
                     }
                   });
@@ -86,7 +84,7 @@ class _SubTaskTileState extends State<SubTaskTile> {
             SlidableAction(
               onPressed: (context) {
                 setState(() {
-                  taskDataController.deletesubTask(taskDataController.selectedTask, widget.index!);
+                  // taskDataController.deletesubTask(taskDataController.selectedTask, widget.index!);
                 });
               },
               backgroundColor: Color(0xFF0392CF),

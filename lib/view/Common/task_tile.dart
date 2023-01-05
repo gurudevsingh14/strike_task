@@ -19,6 +19,13 @@ import '../../providers/task_provider.dart';
 class TaskTile extends StatelessWidget {
   Task? task;
   TaskTile({this.task});
+  int subTaskDoneSize(Task task) {
+    int count=0;
+    task.subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return count;
+  }
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth= FirebaseAuth.instance;
@@ -62,7 +69,7 @@ class TaskTile extends StatelessWidget {
                       ),
                       Text(
                           task!.subTaskList==null? "no subtask added":
-                          (task!.subTaskDoneCount).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
+                          (subTaskDoneSize(task!)).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
                       SizedBox(
@@ -91,7 +98,7 @@ class TaskTile extends StatelessWidget {
                     child: PercentageIndicator(
                       radius: 33.0,
                       lineWidth: 6.0,
-                      percentage: task!.subTaskList==null?null:(task!.subTaskDoneCount)/(task!.subTaskList!.length),
+                      percentage: task!.subTaskList==null?null:(subTaskDoneSize(task!))/(task!.subTaskList!.length),
                     ),
                   ),
                 ],
