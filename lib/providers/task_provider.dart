@@ -89,7 +89,7 @@ class TaskProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  void addSubTask(Task task,SubTask subTask)async{
+  Future<void> addSubTask(Task task,SubTask subTask)async{
     try{
       debugPrint("-----Adding subtask-----");
       dynamic response=await PostService().service(endpoint: "subTasks/${task.id}.json",body: subTask.toJson());
@@ -107,12 +107,29 @@ class TaskProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-
-  void addSubTasks(Task task,List<SubTask> subTasks){
-    task.subTaskList!.addAll(subTasks);
+  void updateSubTask(Task task,SubTask subTask)async{
+    try{
+      dynamic response=await UpdateService().service(endpoint: "subTasks/${task.id}/${subTask.id}.json",body: subTask.toJson());
+      if(response!=null){
+        print(response.toString());
+        debugPrint("-----subTask updated-----");
+      }
+    }catch(e){
+      print(e.toString());
+    }
     notifyListeners();
   }
-
+  void deleteSubTask(Task task,SubTask subTask) async{
+    try{
+      dynamic response=await DeleteService().service("subTasks/${task.id}/${subTask.id}.json");
+      if(response==null){
+        task.subTaskList!.remove(subTask);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
   List<Task> getTaskOnSelectedDate(DateTime date) {
     int size=taskList.length;
     int count;

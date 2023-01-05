@@ -34,6 +34,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
   var uuid=Uuid();
 
   final _formKey = GlobalKey<FormState>();
+  bool loading=false;
 
   @override
   void dispose(){
@@ -213,9 +214,9 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 100,
-                  ),
+                  Center(
+                    child: loading?CircularProgressIndicator():null,
+                  )
                 ],
               ),
             ),
@@ -231,6 +232,9 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
         fontSize: 18,
         callBack: () async {
           if(_formKey.currentState!.validate()){
+            setState(() {
+              loading=true;
+            });
             await taskController.addTask(FirebaseAuth.instance.currentUser!.uid,Task(
                 id: uuid.v1(),
                 name: taskNameController.text,
@@ -241,6 +245,9 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                 categoryController.selectedCategory=null;
                 prioritySelectController.selectedPriority=null;
                 dueDateController.selectedDate=DateTime.now();
+                setState(() {
+                  loading=false;
+                });
                 Navigator.pop(context);
           }
         },

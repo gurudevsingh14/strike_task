@@ -41,14 +41,8 @@ class _SubTaskTileState extends State<SubTaskTile> {
               children: [
                 Checkbox(value: widget.subtask.done, onChanged: (value){
                   setState(() {
-                    if(widget.subtask.done==false){
-                      widget.subtask.done=value!;
-                      taskDataController.notifyListeners();
-                    }
-                    else{
-                      widget.subtask.done=value!;
-                      taskDataController.notifyListeners();
-                    }
+                    widget.subtask.done=!widget.subtask.done;
+                    taskDataController.updateSubTask(taskDataController.selectedTask, widget.subtask);
                   });
                 }),
                 Text(widget.subtask.name??''),
@@ -84,7 +78,7 @@ class _SubTaskTileState extends State<SubTaskTile> {
             SlidableAction(
               onPressed: (context) {
                 setState(() {
-                  // taskDataController.deletesubTask(taskDataController.selectedTask, widget.index!);
+                  taskDataController.deleteSubTask(taskDataController.selectedTask, widget.subtask);
                 });
               },
               backgroundColor: Color(0xFF0392CF),

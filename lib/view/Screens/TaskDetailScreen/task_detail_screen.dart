@@ -17,7 +17,7 @@ import 'components/sub_task_tile.dart';
 
 class TaskDetailScreen extends StatelessWidget {
   TextEditingController subTaskController=TextEditingController();
-
+  bool loading=false;
   @override
   Widget build(BuildContext context) {
     final taskDataController= Provider.of<TaskProvider>(context);
@@ -139,9 +139,9 @@ class TaskDetailScreen extends StatelessWidget {
                             ),
                             actions: [
                               TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
-                              TextButton(onPressed: (){
+                              TextButton(onPressed: ()async{
                                 if(formKey.currentState!.validate()) {
-                                  taskDataController.addSubTask(taskDataController.selectedTask, SubTask(name: subTaskController.text));
+                                  await taskDataController.addSubTask(taskDataController.selectedTask, SubTask(name: subTaskController.text));
                                   subTaskController.text="";
                                   Navigator.pop(context);
                                 }
