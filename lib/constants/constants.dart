@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:strike_task/view/Screens/CalendarScreen/calendar_screen.dart';
-import 'package:strike_task/view/Screens/CategoryScreen/catergory_screen.dart';
 import 'package:strike_task/view/Common/catergory_card.dart';
 import 'package:strike_task/view/Screens/HomeScreen/home_screen.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/profile_screen.dart';
+
+import '../view/Screens/TimelineScreen/timeline_screen.dart';
 
 //colors
 // const primaryColor=Color(0xFB29C979);
@@ -18,4 +19,4 @@ final mutedTextColor=Colors.grey.shade500;
 const lato="Lato";
 
 //screen list
-final screens=[HomeScreen(),CalendarScreen(),CategoryScreen(),ProfileScreen()];
+final screens=[HomeScreen(),CalendarScreen(),TimelineScreen(),ProfileScreen()];

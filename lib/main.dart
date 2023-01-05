@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:strike_task/controller/priority_select_controller.dart';
 import 'package:strike_task/controller/screen_controller.dart';
 import 'package:strike_task/controller/table_calendar_controller.dart';
 import 'package:strike_task/controller/textfield_controller.dart';
+import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
@@ -70,10 +72,14 @@ class _StrikeTaskState extends State<StrikeTask> {
         home: FutureBuilder(
           future: getPref(),
           builder: (context, AsyncSnapshot<bool> snapshot) {
+            final user=Provider.of<UserProvider>(context);
             if(snapshot.connectionState==ConnectionState.active||snapshot.connectionState==ConnectionState.done){
               if(snapshot.hasData){
-                if(snapshot.data!)
+                if(snapshot.data!) {
+                  if(user.getProfileStatus==ProfileStatus.nil)
+                  user.setUser(FirebaseAuth.instance.currentUser!.uid);
                   return BodyWithAppBar();
+                }
                 else return LoginScreen();
               } else return LoginScreen();
             } else return Scaffold(

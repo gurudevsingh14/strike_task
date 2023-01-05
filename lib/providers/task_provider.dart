@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/model/sub_task_model.dart';
+import 'package:strike_task/services/api_services/delete_service.dart';
 import 'package:strike_task/services/api_services/get_service.dart';
 import 'package:strike_task/services/api_services/post_service.dart';
 import 'package:strike_task/services/api_services/put_service.dart';
@@ -23,7 +24,7 @@ class TaskProvider extends ChangeNotifier{
   }
 
   List<Task>taskList=[];
-
+  List<SubTask>subTaskList=[];
   Future<void> fetchTask(String uid)async{
     taskFetchStatus=TaskFetchStatus.loading;
     try{
@@ -42,7 +43,6 @@ class TaskProvider extends ChangeNotifier{
     try{
       debugPrint("----------");
       dynamic response=await PostService().service(endpoint: "tasks/$uid.json",body: task.toJson());
-
       if(response!=null){
        print(response['name']);
        task.id=response['name'];
@@ -56,11 +56,35 @@ class TaskProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  void deleteTask(Task task) {
-    taskList.remove(task);
+  void deleteTask(String uid,Task task) async{
+    try{
+      dynamic response=await DeleteService().service("tasks/$uid/${task.id}.json");
+      if(response==null){
+        taskList.remove(task);
+      }
+    }catch(e){
+      print(e.toString());
+    }
     notifyListeners();
   }
-  void addSubTask(Task task,SubTask subTask){
+  void addSubTask(String uid,Task task,SubTask subTask)async{
+    try{
+      debugPrint("----------");
+      dynamic response=await PutService().service(endpoint: "tasks/$uid/${task.id}.json",body: {
+        'subTaskList': Map.fromIterable(subTaskList,key: (subTask) => subTask.id,value: (subTask) => subTask,)
+      });
+      if(response!=null){
+        print(response['name']);
+        task.id=response['name'];
+        dynamic res= await UpdateService().service(endpoint: "tasks/$uid/${task.id}.json", body: {
+          'id': task.id
+        });
+        taskList.add(task);
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
     task.subTaskList!.add(subTask);
     notifyListeners();
   }
@@ -74,7 +98,7 @@ class TaskProvider extends ChangeNotifier{
     task.subTaskList!.removeAt(index);
     notifyListeners();
   }
-  int getSubTaskSize() => _selectedTask.subTaskList!.length;
+  int getSubTaskSize() => (_selectedTask.subTaskList!=null)?_selectedTask.subTaskList!.length:0;
   int getSubTaskDoneSize() => _selectedTask.subTaskDoneCount;
 
   List<Task> getTaskOnSelectedDate(DateTime date) {
@@ -94,5 +118,4 @@ class TaskProvider extends ChangeNotifier{
     }
     return temp;
   }
-
 }

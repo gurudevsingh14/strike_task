@@ -50,3 +50,4 @@ class UserProvider extends ChangeNotifier {
     return "unsuccessful";
   }
 }
+

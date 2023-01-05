@@ -13,14 +13,14 @@ class PercentageIndicator extends StatelessWidget {
       radius: radius??12.0,
       lineWidth: lineWidth??8.0,
       animation: true,
-      percent: percentage??0,
+      percent: percentage??0/0,
       center: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              ((percentage??0)*100).toStringAsFixed(1)+" %",
+              ((percentage??0/0)*100).toStringAsFixed(1)+" %",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
             ),
             // Text(

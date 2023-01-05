@@ -30,10 +30,6 @@ class UpdateService {
         int statusCode = response.statusCode;
         switch (statusCode) {
           case 200:
-            if (showMessage!) {
-              ScaffoldMessenger.of(GlobalContext.contextKey.currentContext!)
-                  .showSnackBar(SnackBar(content: Text(taskMessage!)));
-            }
             return json.decode(response.body) as Map<String, dynamic>;
           case 400:
             ScaffoldMessenger.of(GlobalContext.contextKey.currentContext!)

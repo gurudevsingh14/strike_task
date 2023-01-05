@@ -13,7 +13,7 @@ class PercentageIndicator extends StatelessWidget {
       radius: radius??12.0,
       lineWidth: lineWidth??8.0,
       animation: true,
-      percent: percentage??1,
+      percent: percentage??double.infinity,
       center: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

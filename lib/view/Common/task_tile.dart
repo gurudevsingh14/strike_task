@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -20,7 +21,7 @@ class TaskTile extends StatelessWidget {
   TaskTile({this.task});
   @override
   Widget build(BuildContext context) {
-    // task!.subTaskList=[SubTask(text: "hi")];
+    FirebaseAuth auth= FirebaseAuth.instance;
     final taskDataController=Provider.of<TaskProvider>(context);
     return InkWell(
       onTap: () {
@@ -98,7 +99,6 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           endActionPane: ActionPane(
-
             motion: DrawerMotion(),
             children: [
               SlidableAction(
@@ -112,7 +112,7 @@ class TaskTile extends StatelessWidget {
               ),
               SlidableAction(
                 onPressed: (context) {
-                  taskDataController.deleteTask(task!);
+                  taskDataController.deleteTask(auth.currentUser!.uid,task!);
                 },
                 backgroundColor: Color(0xFF0392CF),
                 foregroundColor: Colors.white,
