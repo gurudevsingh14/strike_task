@@ -19,6 +19,13 @@ import '../../providers/task_provider.dart';
 class TaskTile extends StatelessWidget {
   Task? task;
   TaskTile({this.task});
+  int subTaskDoneSize(Task task) {
+    int count=0;
+    task.subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return count;
+  }
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth= FirebaseAuth.instance;
@@ -62,7 +69,7 @@ class TaskTile extends StatelessWidget {
                       ),
                       Text(
                           task!.subTaskList==null? "no subtask added":
-                          (task!.subTaskDoneCount).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
+                          (subTaskDoneSize(task!)).toString()+"/"+(task!.subTaskList!.length).toString()+" subtask completed",
                         style: TextStyle(color: blackColor),
                       ),
                       SizedBox(
@@ -85,13 +92,14 @@ class TaskTile extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Spacer(),
                   Container(
-                    width: 100,
+                    // width: 100,
                     height: 80,
                     child: PercentageIndicator(
                       radius: 33.0,
                       lineWidth: 6.0,
-                      percentage: task!.subTaskList==null?null:(task!.subTaskDoneCount)/(task!.subTaskList!.length),
+                      percentage: task!.subTaskList==null?null:(subTaskDoneSize(task!))/(task!.subTaskList!.length),
                     ),
                   ),
                 ],
@@ -103,12 +111,19 @@ class TaskTile extends StatelessWidget {
             children: [
               SlidableAction(
                 // An action can be bigger than the others.
-                onPressed: (context) {
+                onPressed: (context) async{
+                  if(task!.isArchived!){
+                    await taskDataController.unArchiveTask(task!);
+                  }
+                  else{
+                    await taskDataController.archiveTask(task!);
+                  }
+
                 },
                 backgroundColor: Color(0xFF7BC043),
                 foregroundColor: Colors.white,
-                icon: Icons.edit,
-                label: 'Edit',
+                icon: Icons.archive_outlined,
+                label: task!.isArchived!?'Unarchive':'Archive',
               ),
               SlidableAction(
                 onPressed: (context) {
@@ -116,7 +131,7 @@ class TaskTile extends StatelessWidget {
                 },
                 backgroundColor: Color(0xFF0392CF),
                 foregroundColor: Colors.white,
-                icon: Icons.delete,
+                icon: Icons.delete_outline,
                 label: 'Delete',
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),

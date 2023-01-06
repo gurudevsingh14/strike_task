@@ -17,7 +17,7 @@ import 'components/sub_task_tile.dart';
 
 class TaskDetailScreen extends StatelessWidget {
   TextEditingController subTaskController=TextEditingController();
-
+  bool loading=false;
   @override
   Widget build(BuildContext context) {
     final taskDataController= Provider.of<TaskProvider>(context);
@@ -57,7 +57,7 @@ class TaskDetailScreen extends StatelessWidget {
                     child: PercentageIndicator(
                       radius: indicatorRadius,
                       lineWidth: 9.0,
-                      percentage: taskDataController.getSubTaskDoneSize()/taskDataController.getSubTaskSize(),
+                      percentage: taskDataController.getSubTaskDoneSize/taskDataController.getSubTaskSize,
                     )
                   ),
                   Container(
@@ -73,7 +73,7 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.green.shade300),
-                              child: Text((taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor),),
+                              child: Text((taskDataController.getSubTaskDoneSize).toString(),style: TextStyle(color: whiteColor),),
                             )
                           ],
                         ),
@@ -95,7 +95,8 @@ class TaskDetailScreen extends StatelessWidget {
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 2,horizontal: 5),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(100),color: Colors.yellow.shade300),
-                              child: Text((taskDataController.selectedTask.subTaskList??[].length-taskDataController.selectedTask.subTaskDoneCount).toString(),style: TextStyle(color: whiteColor)),
+                              child: Text((taskDataController.selectedTask.subTaskList!=null? (taskDataController.selectedTask.subTaskList!.length
+                                  -taskDataController.getSubTaskDoneSize).toString():"0"),style: TextStyle(color: whiteColor)),
                             )
                           ],
                         ),
@@ -138,9 +139,9 @@ class TaskDetailScreen extends StatelessWidget {
                             ),
                             actions: [
                               TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
-                              TextButton(onPressed: (){
+                              TextButton(onPressed: ()async{
                                 if(formKey.currentState!.validate()) {
-                                  taskDataController.addSubTask(FirebaseAuth.instance.currentUser!.uid,taskDataController.selectedTask, SubTask(name: subTaskController.text));
+                                  await taskDataController.addSubTask(taskDataController.selectedTask, SubTask(name: subTaskController.text));
                                   subTaskController.text="";
                                   Navigator.pop(context);
                                 }

@@ -46,6 +46,7 @@ dependencies:
   http: ^0.13.5
   shared_preferences: ^2.0.15
   timelines: ^0.1.0
+  font_awesome_flutter: ^10.3.0
 
 dev_dependencies:
   flutter_test:

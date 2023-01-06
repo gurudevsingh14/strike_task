@@ -24,19 +24,63 @@ class TaskProvider extends ChangeNotifier{
   }
 
   List<Task>taskList=[];
-  List<SubTask>subTaskList=[];
+  Map<DateTime,List<Task>>dueDateTaskMap={};
+  void initializeDueDateTaskMap(){
+    taskList.forEach((ele) { 
+      dueDateTaskMap[ele.dueDate]!=null?dueDateTaskMap[ele.dueDate]!.add(ele):dueDateTaskMap[ele.dueDate!]=[ele];
+    });
+  }
+  void addInDueDateTaskMap(Task task){
+    dueDateTaskMap[task.dueDate]!=null?dueDateTaskMap[task.dueDate]!.add(task):dueDateTaskMap[task.dueDate!]=[task];
+  }
+  void deleteFromDueDateTaskMap(Task task){
+    if(dueDateTaskMap[task.dueDate]!=null)dueDateTaskMap[task.dueDate]!.remove(task);
+    if(dueDateTaskMap[task.dueDate]!.length==0) dueDateTaskMap.remove(task.dueDate);
+  }
+  int get getSubTaskSize => (_selectedTask.subTaskList!=null)?_selectedTask.subTaskList!.length:0;
+  int get getSubTaskDoneSize {
+    int count=0;
+    if(_selectedTask.subTaskList==null) return 0;
+    _selectedTask.subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return count;
+  }
+  int get getTaskDoneCount {
+    int count=0;
+    taskList.forEach((task) {
+        if(task.isTaskCompleted())count++;
+    });
+    return count;
+  }
   Future<void> fetchTask(String uid)async{
     taskFetchStatus=TaskFetchStatus.loading;
     try{
       dynamic response=await GetApiService().service(endpoint: "tasks/$uid.json");
       if(response!=null){
-        response.forEach((k,v)=>taskList.add(Task.fromJson(v)));
+        response.forEach((k,v) async {
+          Task task=Task.fromJson(v);
+          await fetchSubTasks(task);
+          taskList.add(task);
+          addInDueDateTaskMap(task);
+        });
       }
     }catch(e){
       print(e);
     }
     taskFetchStatus=TaskFetchStatus.fetched;
     debugPrint("-------tasks fetched---------");
+    notifyListeners();
+  }
+  Future<void> fetchSubTasks(Task task)async{
+    try{
+      dynamic response=await GetApiService().service(endpoint: "subTasks/${task.id}.json");
+      if(response!=null){
+        response.forEach((k,v)=>task.subTaskList!.add(SubTask.fromJson(v)));
+      }
+    }catch(e){
+      print(e);
+    }
     notifyListeners();
   }
   Future<void> addTask(String uid,Task task) async{
@@ -50,6 +94,7 @@ class TaskProvider extends ChangeNotifier{
           'id': task.id
         });
         taskList.add(task);
+        addInDueDateTaskMap(task);
       }
     }catch(e){
       print(e.toString());
@@ -61,45 +106,82 @@ class TaskProvider extends ChangeNotifier{
       dynamic response=await DeleteService().service("tasks/$uid/${task.id}.json");
       if(response==null){
         taskList.remove(task);
+        deleteFromDueDateTaskMap(task);
       }
     }catch(e){
       print(e.toString());
     }
     notifyListeners();
   }
-  void addSubTask(String uid,Task task,SubTask subTask)async{
+
+  archiveTask(Task taskToUpdate)async{
+
+    int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
+    taskList[index].isArchived = true;
+    Future.delayed(Duration(microseconds: 1));
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+  }
+
+  unArchiveTask(Task taskToUpdate)async{
+    int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
+    taskList[index].isArchived = false;
+    notifyListeners();
+    Future.delayed(Duration(microseconds: 1));
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+  }
+  Future<void> updateTask(String uid,Task task)async{
     try{
-      debugPrint("----------");
-      dynamic response=await PutService().service(endpoint: "tasks/$uid/${task.id}.json",body: {
-        'subTaskList': Map.fromIterable(subTaskList,key: (subTask) => subTask.id,value: (subTask) => subTask,)
-      });
+      dynamic response=await UpdateService().service(endpoint: "tasks/uid/${task.id}.json",body: task.toJson());
+      if(response!=null){
+        print(response.toString());
+        debugPrint("-----Task updated-----");
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  Future<void> addSubTask(Task task,SubTask subTask)async{
+    try{
+      debugPrint("-----Adding subtask-----");
+      dynamic response=await PostService().service(endpoint: "subTasks/${task.id}.json",body: subTask.toJson());
       if(response!=null){
         print(response['name']);
-        task.id=response['name'];
-        dynamic res= await UpdateService().service(endpoint: "tasks/$uid/${task.id}.json", body: {
-          'id': task.id
+        subTask.id=response['name'];
+        dynamic res= await UpdateService().service(endpoint: "subTasks/${task.id}/${subTask.id}.json", body: {
+          'id': subTask.id
         });
-        taskList.add(task);
+        task.subTaskList==null?task.subTaskList=[subTask]:task.subTaskList!.add(subTask);
+        debugPrint("-----subtask Added-----");
       }
     }catch(e){
       print(e.toString());
     }
     notifyListeners();
-    task.subTaskList!.add(subTask);
+  }
+  void updateSubTask(Task task,SubTask subTask)async{
+    try{
+      dynamic response=await UpdateService().service(endpoint: "subTasks/${task.id}/${subTask.id}.json",body: subTask.toJson());
+      if(response!=null){
+        print(response.toString());
+        debugPrint("-----subTask updated-----");
+      }
+    }catch(e){
+      print(e.toString());
+    }
     notifyListeners();
   }
-  void addSubTasks(Task task,List<SubTask> subTasks){
-    task.subTaskList!.addAll(subTasks);
+  void deleteSubTask(Task task,SubTask subTask) async{
+    try{
+      dynamic response=await DeleteService().service("subTasks/${task.id}/${subTask.id}.json");
+      if(response==null){
+        task.subTaskList!.remove(subTask);
+      }
+    }catch(e){
+      print(e.toString());
+    }
     notifyListeners();
   }
-  void deletesubTask(Task task,int index){
-    if(task.subTaskList![index].done==true)
-      task.subTaskDoneCount--;
-    task.subTaskList!.removeAt(index);
-    notifyListeners();
-  }
-  int getSubTaskSize() => (_selectedTask.subTaskList!=null)?_selectedTask.subTaskList!.length:0;
-  int getSubTaskDoneSize() => _selectedTask.subTaskDoneCount;
 
   List<Task> getTaskOnSelectedDate(DateTime date) {
     int size=taskList.length;
