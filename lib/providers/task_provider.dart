@@ -129,6 +129,14 @@ class TaskProvider extends ChangeNotifier{
     Future.delayed(Duration(microseconds: 1));
     await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
   }
+  starTask(Task task)async{
+    task.isStarred=!task.isStarred!;
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,task);
+  }
+  unStarTask(Task task)async{
+    task.isStarred=!task.isStarred!;
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,task);
+  }
   Future<void> updateTask(String uid,Task task)async{
     try{
       dynamic response=await UpdateService().service(endpoint: "tasks/uid/${task.id}.json",body: task.toJson());

@@ -107,8 +107,24 @@ class TaskTile extends StatelessWidget {
             ),
           ),
           endActionPane: ActionPane(
+            extentRatio: 1/1.3,
             motion: DrawerMotion(),
             children: [
+              SlidableAction(
+                // An action can be bigger than the others.
+                onPressed: (context) async{
+                  if(task!.isStarred!){
+                    await taskDataController.unStarTask(task!);
+                  }
+                  else{
+                    await taskDataController.starTask(task!);
+                  }
+                },
+                backgroundColor: Colors.orangeAccent,
+                foregroundColor: Colors.white,
+                icon: task!.isStarred!?Icons.star:Icons.star_outline,
+                label: task!.isStarred!?'Unstar':'Star',
+              ),
               SlidableAction(
                 // An action can be bigger than the others.
                 onPressed: (context) async{
@@ -122,7 +138,7 @@ class TaskTile extends StatelessWidget {
                 },
                 backgroundColor: Color(0xFF7BC043),
                 foregroundColor: Colors.white,
-                icon: Icons.archive_outlined,
+                icon: task!.isArchived!?Icons.unarchive_outlined:Icons.archive_outlined,
                 label: task!.isArchived!?'Unarchive':'Archive',
               ),
               SlidableAction(

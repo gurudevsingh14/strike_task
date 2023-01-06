@@ -13,9 +13,9 @@ class Task{
   String? priority;
   bool? isArchived;
   List<SubTask>? subTaskList;
-
+  bool? isStarred;
   Task({this.id, this.name,this.category, this.description, this.dueDate,
-      this.priority, this.subTaskList,this.isArchived=false});
+      this.priority, this.subTaskList,this.isArchived=false,this.isStarred=false});
 
   bool isTaskCompleted(){
     int count=0;
@@ -34,7 +34,8 @@ class Task{
         dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
         subTaskList: data['subTaskList']??[],
-        isArchived: data['isArchived']
+        isArchived: data['isArchived'],
+        isStarred: data['isStarred']
         );
   }
 
@@ -47,7 +48,8 @@ class Task{
       'dueDate': dueDate.toString(),
       'priority': priority,
       'subTaskList': subTaskList,
-      'isArchived': isArchived
+      'isArchived': isArchived,
+      'isStarred': isStarred
     };
   }
 }
