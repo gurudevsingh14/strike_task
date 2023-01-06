@@ -6,16 +6,20 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/main.dart';
+import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/services/auth_services/auth_service.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
+import 'package:strike_task/view/Common/task_tile.dart';
+import 'package:strike_task/view/Screens/ProfileScreen/components/archived_tasks.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
+    final taskController=Provider.of<TaskProvider>(context);
     final _auth = AuthService(FirebaseAuth.instance, context);
     return Scaffold(
       body: Stack(
@@ -106,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '37',
+                                taskController.taskList.length.toString(),
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -129,7 +133,7 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                               Text(
-                                '37',
+                                taskController.getTaskDoneCount.toString(),
                                 style: TextStyle(
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
@@ -302,41 +306,52 @@ class ProfileScreen extends StatelessWidget {
                         ]),
                       ),
                     ),
-                    Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          // height: 50,
-                          width: displayWidth(context) * 0.95,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green.withOpacity(0.5),
-                                ),
-                                child: Icon(
-                                  Icons.archive_outlined,
-                                  color: Colors.green,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Text('Archived'),
-                              Spacer(),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 18,
-                              ),
-                            ],
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25)
                           ),
-                        )),
+                          context: context, builder: (context) {
+                          return ArchivedTasks();
+                        },);
+                      },
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            // height: 50,
+                            width: displayWidth(context) * 0.95,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.green.withOpacity(0.5),
+                                  ),
+                                  child: Icon(
+                                    Icons.archive_outlined,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Text('Archived'),
+                                Spacer(),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 18,
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
                   ],
                 ),
               ),

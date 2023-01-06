@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/menu_items.dart';
 import 'package:strike_task/model/menu_item_model.dart';
 import 'package:strike_task/model/task_model.dart';
@@ -45,7 +46,9 @@ class _SubTaskTileState extends State<SubTaskTile> {
                     taskDataController.updateSubTask(taskDataController.selectedTask, widget.subtask);
                   });
                 }),
-                Text(widget.subtask.name??''),
+                SizedBox(
+                  width: displayWidth(context)*0.5,
+                    child: Text(widget.subtask.name??'',maxLines: 50,)),
                 // Expanded(child: Row(
                 //   mainAxisAlignment: MainAxisAlignment.end,
                 //   children: [

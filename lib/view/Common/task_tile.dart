@@ -92,8 +92,9 @@ class TaskTile extends StatelessWidget {
                       ),
                     ],
                   ),
+                  Spacer(),
                   Container(
-                    width: 100,
+                    // width: 100,
                     height: 80,
                     child: PercentageIndicator(
                       radius: 33.0,
@@ -110,12 +111,19 @@ class TaskTile extends StatelessWidget {
             children: [
               SlidableAction(
                 // An action can be bigger than the others.
-                onPressed: (context) {
+                onPressed: (context) async{
+                  if(task!.isArchived!){
+                    await taskDataController.unArchiveTask(task!);
+                  }
+                  else{
+                    await taskDataController.archiveTask(task!);
+                  }
+
                 },
                 backgroundColor: Color(0xFF7BC043),
                 foregroundColor: Colors.white,
-                icon: Icons.edit,
-                label: 'Edit',
+                icon: Icons.archive_outlined,
+                label: task!.isArchived!?'Unarchive':'Archive',
               ),
               SlidableAction(
                 onPressed: (context) {
@@ -123,7 +131,7 @@ class TaskTile extends StatelessWidget {
                 },
                 backgroundColor: Color(0xFF0392CF),
                 foregroundColor: Colors.white,
-                icon: Icons.delete,
+                icon: Icons.delete_outline,
                 label: 'Delete',
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(10),

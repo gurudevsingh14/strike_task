@@ -235,12 +235,14 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
             setState(() {
               loading=true;
             });
+            DateTime date= dueDateController.selectedDate;
+            print('--------${date.day}/${date.month}/${date.year}---------');
             await taskController.addTask(FirebaseAuth.instance.currentUser!.uid,Task(
                 id: uuid.v1(),
                 name: taskNameController.text,
                 category: categoryController.selectedCategory,
                 description: descriptionController.text,
-                dueDate: dueDateController.selectedDate,
+                dueDate: DateTime(date.year,date.month,date.day),
                 priority: priorityController.text));
                 categoryController.selectedCategory=null;
                 prioritySelectController.selectedPriority=null;

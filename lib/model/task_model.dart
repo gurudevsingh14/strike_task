@@ -11,11 +11,20 @@ class Task{
   String? description;
   DateTime? dueDate;
   String? priority;
+  bool? isArchived;
   List<SubTask>? subTaskList;
 
   Task({this.id, this.name,this.category, this.description, this.dueDate,
-      this.priority, this.subTaskList});
+      this.priority, this.subTaskList,this.isArchived=false});
 
+  bool isTaskCompleted(){
+    int count=0;
+    if(subTaskList==null||subTaskList!.length==0) return false;
+    subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return subTaskList!.length==count;
+  }
   factory Task.fromJson(Map<String, dynamic> data) {
     return Task(
         id: data['id'],
@@ -25,6 +34,7 @@ class Task{
         dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
         subTaskList: data['subTaskList']??[],
+        isArchived: data['isArchived']
         );
   }
 
@@ -37,6 +47,7 @@ class Task{
       'dueDate': dueDate.toString(),
       'priority': priority,
       'subTaskList': subTaskList,
+      'isArchived': isArchived
     };
   }
 }
