@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
-import 'package:strike_task/controller/category_controller.dart';
+import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
@@ -49,7 +49,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
   Widget build(BuildContext context) {
     final controller = Provider.of<PrioritySelectController>(context);
     final dueDateController=Provider.of<DateTimeController>(context);
-    final categoryController=Provider.of<CategoryController>(context);
+    final categoryController=Provider.of<CategoryProvider>(context);
     final taskController = Provider.of<TaskProvider>(context);
     final prioritySelectController = Provider.of<PrioritySelectController>(context);
     return Scaffold(
@@ -130,9 +130,9 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                               ),
                               actions: [
                                 TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
-                                TextButton(onPressed: (){
-                                  if(formKey.currentState!.validate()) {
-                                    categoryController.addcategory(addCategoryController.text);
+                                TextButton(onPressed: ()async{
+                                  if(formKey.currentState!.validate()){
+                                    await categoryController.addcategory(addCategoryController.text);
                                     addCategoryController.text="";
                                     Navigator.pop(context);
                                   }

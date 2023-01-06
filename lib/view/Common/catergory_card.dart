@@ -8,7 +8,8 @@ import '../../constants/menu_items.dart';
 import '../../model/menu_item_model.dart';
 
 class CategoryCard extends StatelessWidget {
-
+  String? category;
+  CategoryCard({this.category});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -31,7 +32,7 @@ class CategoryCard extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,10 +51,10 @@ class CategoryCard extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20,),
-              Text('Task Category',style: TextStyle( color: whiteColor,
+              Text(category??'Task Category',maxLines:2,overflow:TextOverflow.ellipsis,style: TextStyle( color: whiteColor,
                   fontWeight: FontWeight.w500,
                   fontSize:30),),
-              SizedBox(height: 16,),
+              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -65,7 +66,7 @@ class CategoryCard extends StatelessWidget {
               LinearProgressIndicator(
                 value: 0.7,
               ),
-              SizedBox(height: 20,),
+              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

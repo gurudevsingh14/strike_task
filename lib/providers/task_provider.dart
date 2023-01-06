@@ -22,7 +22,6 @@ class TaskProvider extends ChangeNotifier{
     _selectedTask = value;
     notifyListeners();
   }
-
   List<Task>taskList=[];
   Map<DateTime,List<Task>>dueDateTaskMap={};
   void initializeDueDateTaskMap(){
@@ -115,7 +114,6 @@ class TaskProvider extends ChangeNotifier{
   }
 
   archiveTask(Task taskToUpdate)async{
-
     int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
     taskList[index].isArchived = true;
     Future.delayed(Duration(microseconds: 1));
@@ -139,7 +137,7 @@ class TaskProvider extends ChangeNotifier{
   }
   Future<void> updateTask(String uid,Task task)async{
     try{
-      dynamic response=await UpdateService().service(endpoint: "tasks/uid/${task.id}.json",body: task.toJson());
+      dynamic response=await UpdateService().service(endpoint: "tasks/$uid/${task.id}.json",body: task.toJson());
       if(response!=null){
         print(response.toString());
         debugPrint("-----Task updated-----");

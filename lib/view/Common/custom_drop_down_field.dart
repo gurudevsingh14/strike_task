@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:strike_task/controller/category_controller.dart';
-
-import '../../constants/category_list.dart';
+import 'package:strike_task/providers/category_provider.dart';
 import '../../constants/constants.dart';
 
 class CustomDropDownField extends StatelessWidget {
@@ -12,7 +10,7 @@ class CustomDropDownField extends StatelessWidget {
   CustomDropDownField({this.validator});
   @override
   Widget build(BuildContext context) {
-    final categoryController=Provider.of<CategoryController>(context);
+    final categoryController=Provider.of<CategoryProvider>(context);
     return DropdownButtonFormField<String>(
       isExpanded: true,
       validator: validator,
@@ -53,7 +51,7 @@ class CustomDropDownField extends StatelessWidget {
         category = newValue;
         categoryController.selectedCategory=newValue;
       },
-      items: categoryList
+      items: categoryController.categoryList
           .map<DropdownMenuItem<String>>((dynamic value) {
         return DropdownMenuItem(
           value: value,

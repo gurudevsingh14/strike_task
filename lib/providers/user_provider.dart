@@ -17,9 +17,14 @@ class UserProvider extends ChangeNotifier {
   // }
   Future<String>? registerUser(UserModel user) async {
     try {
-      dynamic response = await PutService()
-          .service(endpoint: "users/${user.uid}.json", body: user.toJson());
+      dynamic response = await PutService().service(endpoint: "users/${user.uid}.json", body: user.toJson());
       if (response != null) {
+        response= await PutService().service(endpoint: "category/${user.uid}.json", body:{
+          "home":"",
+          "study":"",
+          "office":""
+        });
+        print(response.toString());
         currentUser = user;
         _profileStatus = ProfileStatus.fetched;
         notifyListeners();
@@ -36,8 +41,8 @@ class UserProvider extends ChangeNotifier {
   Future<String?> setUser(String uid) async {
     _profileStatus=ProfileStatus.loading;
     try {
-      dynamic response =
-          await GetApiService().service(endpoint: "users/${uid}.json");
+      dynamic response = await GetApiService().service(endpoint: "users/${uid}.json");
+
       if (response != null) {
         currentUser = UserModel.fromJson(response);
         _profileStatus = ProfileStatus.fetched;
