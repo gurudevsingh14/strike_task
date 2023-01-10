@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/providers/category_provider.dart';
+import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/days_left_tag.dart';
 
 import '../../constants/menu_items.dart';
@@ -12,6 +15,8 @@ class CategoryCard extends StatelessWidget {
   CategoryCard({this.category});
   @override
   Widget build(BuildContext context) {
+    final categoryProvider=Provider.of<CategoryProvider>(context);
+    final taskProvider=Provider.of<TaskProvider>(context);
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -45,8 +50,21 @@ class CategoryCard extends StatelessWidget {
                       padding: EdgeInsets.zero,
                         icon: Icon(Icons.more_vert,size: 18,color: whiteColor,),
                         itemBuilder: (context) => [
-                          ...menuItems.map((e) => PopupMenuItem(child: Row(children: [e.icon!,e.text!],)))
-                        ]),
+                          PopupMenuItem(
+                            child: Row( children: [Icon(Icons.delete_outline),Text('delete')],),
+                            onTap: () async {
+                              await categoryProvider.deleteCategory(category!);
+                            },
+                          )
+                        ],
+                        // itemBuilder: (context) => [
+                        //   ...menuItems.map((e) => PopupMenuItem(
+                        //       onTap: () async {
+                        //         categoryProvider.deleteCategory(category!);
+                        //       },
+                        //       child: Row(children: [e.icon!,e.text!],)))
+                        // ]),
+                    )
                   )
                 ],
               ),
@@ -59,12 +77,12 @@ class CategoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('In Progress',style: TextStyle(color: whiteColor),),
-                  Text('70%',style: TextStyle(color: whiteColor)),
+                  Text('${(((taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()).toList().length)/(taskProvider.taskList.length))*100).toStringAsFixed(1)}',style: TextStyle(color: whiteColor)),
                 ],
               ),
               SizedBox(height: 5,),
               LinearProgressIndicator(
-                value: 0.7,
+                value: ((taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()).toList().length)/((taskProvider.taskList.length)==0?1:(taskProvider.taskList.length))),
               ),
               Spacer(),
               Row(

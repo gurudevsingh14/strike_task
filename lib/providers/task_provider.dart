@@ -84,7 +84,7 @@ class TaskProvider extends ChangeNotifier{
   }
   Future<void> addTask(String uid,Task task) async{
     try{
-      debugPrint("----------");
+      debugPrint("-----${task.dueDate}-----");
       dynamic response=await PostService().service(endpoint: "tasks/$uid.json",body: task.toJson());
       if(response!=null){
        print(response['name']);

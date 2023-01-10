@@ -8,6 +8,7 @@ import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/task_provider.dart';
+import 'package:strike_task/providers/user_provider.dart';
 import 'package:strike_task/view/Common/add_button.dart';
 import 'package:strike_task/view/Common/custom_drop_down_field.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
@@ -52,6 +53,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
     final categoryController=Provider.of<CategoryProvider>(context);
     final taskController = Provider.of<TaskProvider>(context);
     final prioritySelectController = Provider.of<PrioritySelectController>(context);
+    final userProvider=Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Create Task"),
@@ -242,7 +244,7 @@ class _CreateTaskModalState extends State<CreateTaskModal> {
                 name: taskNameController.text,
                 category: categoryController.selectedCategory,
                 description: descriptionController.text,
-                dueDate: DateTime(date.year,date.month,date.day),
+                dueDate: DateTime(date.year,date.month,date.day,23,59,59),
                 priority: priorityController.text));
                 categoryController.selectedCategory=null;
                 prioritySelectController.selectedPriority=null;
