@@ -77,6 +77,7 @@ class CategoryCard extends StatelessWidget {
                                             TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
                                             TextButton(onPressed: ()async{
                                               await categoryProvider.deleteCategory(category!);
+                                              await taskProvider.deleteAllTaskWithCategory(category!);
                                               Navigator.pop(context);}, child: Text('Delete'),)
                                           ],),
                                       )

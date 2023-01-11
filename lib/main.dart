@@ -57,14 +57,6 @@ class _StrikeTaskState extends State<StrikeTask> {
             create: (context) => UserProvider(),
             update: (context, taskProvider, user) => user!..update(taskProvider.dueDateTaskMap),
         ),
-        ChangeNotifierProxyProvider<CategoryProvider,TaskProvider>(
-          create: (context) => TaskProvider(),
-          update: (context, categoryProvider, taskProvider) => taskProvider!..updateProvider(categoryProvider.taskList)
-        ),
-        ChangeNotifierProxyProvider<TaskProvider,CategoryProvider>(
-            create: (context) => CategoryProvider(),
-            update: (context, taskProvider, categoryProvider) => categoryProvider!..taskList=taskProvider.taskList
-        ),
       ],
       child: MaterialApp(
         routes: {

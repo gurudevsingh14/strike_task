@@ -26,9 +26,7 @@ class CategoryProvider extends ChangeNotifier{
       String uid=FirebaseAuth.instance.currentUser!.uid;
       dynamic response=await GetApiService().service(endpoint: "users/$uid/category.json");
       if(response!=null){
-        response.forEach((k,v){
-          categoryList.add(v);
-        });
+        categoryList=List<String>.from(response);
       }
     }catch(e){
       print(e);
@@ -47,33 +45,11 @@ class CategoryProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-  Future<void> deleteAllTaskWithCategory(String category)async{
-    try{
-      final uid=FirebaseAuth.instance.currentUser!.uid;
-      taskList=[];
-      dynamic response=await GetApiService().service(endpoint: "tasks/$uid.json");
-      if(response!=null){
-        Map<String,dynamic>body={};
-        response.forEach((k,v) async {
-          if(v['category']!=category){
-            body[k]=v;
-            taskList.add(Task.fromJson(v));
-          }else{
-            await DeleteService().service("subTasks/$k.json");
-          }
-        });
-        response=await PutService().service(endpoint: "tasks/$uid.json", body: body);
-      }
-    }catch(e){
-      print(e.toString());
-    }
-  }
   Future<void> deleteCategory(String value) async{
     try{
       String uid=FirebaseAuth.instance.currentUser!.uid;
       categoryList.remove(value);
       dynamic response=await UpdateService().service(endpoint: "users/$uid.json",body: {'category':categoryList});
-      await deleteAllTaskWithCategory(value);
     }catch(e){
       print(e.toString());
     }

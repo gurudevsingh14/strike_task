@@ -216,4 +216,23 @@ class TaskProvider extends ChangeNotifier{
     }
     return temp;
   }
+  Future<void> deleteAllTaskWithCategory(String category)async{
+    try{
+      final uid=FirebaseAuth.instance.currentUser!.uid;
+      taskList.forEach((task)async{
+        if(task.category==category){
+          await DeleteService().service("subTasks/${task.id}.json");
+        }
+      });
+      taskList.removeWhere((task) => task.category==category);
+      dynamic response=PutService().service(endpoint: "tasks/$uid.json",
+          body: Map.fromIterable(taskList,key: (task) => task.uid,value: (task) => task.toJson(),));
+      if(response!=null){
+        initializeDueDateTaskMap();
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
 }

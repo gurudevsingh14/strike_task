@@ -52,7 +52,7 @@ dependencies:
   cached_network_image: ^3.2.3
   image_cropper: ^3.0.1
   photo_view: ^0.14.0
-
+  shimmer: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
