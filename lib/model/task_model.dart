@@ -25,6 +25,14 @@ class Task{
     });
     return subTaskList!.length==count;
   }
+  double completePercentage(){
+    int count=0;
+    if(subTaskList==null||subTaskList!.length==0) return 0.0;
+    subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return (count/subTaskList!.length)*100;
+  }
   factory Task.fromJson(Map<String, dynamic> data) {
     return Task(
         id: data['id'],

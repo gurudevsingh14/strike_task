@@ -102,17 +102,15 @@ class TaskProvider extends ChangeNotifier{
   }
   void deleteTask(String uid,Task task) async{
     try{
-      dynamic response=await DeleteService().service("tasks/$uid/${task.id}.json");
-      if(response==null){
-        taskList.remove(task);
-        deleteFromDueDateTaskMap(task);
-      }
+      await DeleteService().service("subTasks/${task.id}.json");
+      await DeleteService().service("tasks/$uid/${task.id}.json");
+      taskList.remove(task);
+       deleteFromDueDateTaskMap(task);
     }catch(e){
       print(e.toString());
     }
     notifyListeners();
   }
-
   archiveTask(Task taskToUpdate)async{
     int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
     taskList[index].isArchived = true;
@@ -170,12 +168,12 @@ class TaskProvider extends ChangeNotifier{
       dynamic response=await UpdateService().service(endpoint: "subTasks/${task.id}/${subTask.id}.json",body: subTask.toJson());
       if(response!=null){
         print(response.toString());
+        notifyListeners();
         debugPrint("-----subTask updated-----");
       }
     }catch(e){
       print(e.toString());
     }
-    notifyListeners();
   }
   void deleteSubTask(Task task,SubTask subTask) async{
     try{

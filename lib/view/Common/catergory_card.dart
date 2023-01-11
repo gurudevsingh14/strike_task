@@ -17,6 +17,17 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoryProvider=Provider.of<CategoryProvider>(context);
     final taskProvider=Provider.of<TaskProvider>(context);
+    double calCompletePercentage(List<Task>taskList){
+      List<Task>categoryTasks=taskList.where((task) => task.category==category).toList();
+      int length=categoryTasks.length;
+      if(length==0) return 0;
+      double sumOfCompletePercentage=0;
+      categoryTasks.forEach((task) {
+        sumOfCompletePercentage+=task.completePercentage();
+      });
+      double avg=sumOfCompletePercentage/length;
+      return avg;
+    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -76,13 +87,18 @@ class CategoryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('In Progress',style: TextStyle(color: whiteColor),),
-                  Text('${(((taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()).toList().length)/(taskProvider.taskList.length))*100).toStringAsFixed(1)}',style: TextStyle(color: whiteColor)),
+                  Text(calCompletePercentage(taskProvider.taskList)==100?'Completed':'In Progress',style: TextStyle(color: whiteColor),),
+                  Text('${calCompletePercentage(taskProvider.taskList).toStringAsFixed(1)}',style: TextStyle(color: whiteColor)),
                 ],
               ),
               SizedBox(height: 5,),
-              LinearProgressIndicator(
-                value: ((taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()).toList().length)/((taskProvider.taskList.length)==0?1:(taskProvider.taskList.length))),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white,width: 0.4)
+                ),
+                child: LinearProgressIndicator(
+                  value: calCompletePercentage(taskProvider.taskList)/100,
+                ),
               ),
               Spacer(),
               Row(
