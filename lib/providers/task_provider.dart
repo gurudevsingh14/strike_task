@@ -226,9 +226,10 @@ class TaskProvider extends ChangeNotifier{
       });
       taskList.removeWhere((task) => task.category==category);
       dynamic response=PutService().service(endpoint: "tasks/$uid.json",
-          body: Map.fromIterable(taskList,key: (task) => task.uid,value: (task) => task.toJson(),));
+          body: Map.fromIterable(taskList,key: (task) => task.id,value: (task) => task.toJson(),));
       if(response!=null){
         initializeDueDateTaskMap();
+        print("------------deleted all tasks-------------");
       }
     }catch(e){
       print(e.toString());
