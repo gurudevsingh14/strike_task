@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:strike_task/constants/global_context.dart';
 import 'package:strike_task/providers/user_provider.dart';
+
+import '../../controller/screen_controller.dart';
 class AuthService{
   FirebaseAuth _auth;
   BuildContext context;

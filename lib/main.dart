@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strike_task/constants/constants.dart';
-import 'package:strike_task/controller/category_controller.dart';
+import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/controller/priority_select_controller.dart';
 import 'package:strike_task/controller/screen_controller.dart';
@@ -44,14 +44,18 @@ class _StrikeTaskState extends State<StrikeTask> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-         ChangeNotifierProvider(create: (context) => ScreenController(),),
+        ChangeNotifierProvider(create: (context) => ScreenController(),),
         ChangeNotifierProvider(create: (context) => TextFieldController(),),
         ChangeNotifierProvider(create: (context) => DateTimeController(),),
         ChangeNotifierProvider(create: (context) => PrioritySelectController(),),
         ChangeNotifierProvider(create: (context) => TableCalendarController(),),
         ChangeNotifierProvider(create: (context) => TaskProvider(),),
-        ChangeNotifierProvider(create: (context) => CategoryController(),),
-        ChangeNotifierProvider(create: (context)=>UserProvider())
+        ChangeNotifierProvider(create: (context) => CategoryProvider(),),
+        ChangeNotifierProvider(create: (context)=>UserProvider()),
+        ChangeNotifierProxyProvider<TaskProvider,UserProvider>(
+            create: (context) => UserProvider(),
+            update: (context, taskProvider, user) => user!..update(taskProvider.dueDateTaskMap),
+        ),
       ],
       child: MaterialApp(
         routes: {

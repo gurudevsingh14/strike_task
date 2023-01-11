@@ -12,10 +12,10 @@ class Task{
   DateTime? dueDate;
   String? priority;
   bool? isArchived;
-  List<SubTask>? subTaskList;
-
+  List<SubTask>? subTaskList=[];
+  bool? isStarred;
   Task({this.id, this.name,this.category, this.description, this.dueDate,
-      this.priority, this.subTaskList,this.isArchived=false});
+      this.priority,this.isArchived=false,this.isStarred=false});
 
   bool isTaskCompleted(){
     int count=0;
@@ -25,6 +25,14 @@ class Task{
     });
     return subTaskList!.length==count;
   }
+  double completePercentage(){
+    int count=0;
+    if(subTaskList==null||subTaskList!.length==0) return 0.0;
+    subTaskList!.forEach((ele) {
+      if(ele.done)count++;
+    });
+    return (count/subTaskList!.length)*100;
+  }
   factory Task.fromJson(Map<String, dynamic> data) {
     return Task(
         id: data['id'],
@@ -33,8 +41,8 @@ class Task{
         description: data['description'],
         dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
-        subTaskList: data['subTaskList']??[],
-        isArchived: data['isArchived']
+        isArchived: data['isArchived'],
+        isStarred: data['isStarred']
         );
   }
 
@@ -46,8 +54,8 @@ class Task{
       'description': description,
       'dueDate': dueDate.toString(),
       'priority': priority,
-      'subTaskList': subTaskList,
-      'isArchived': isArchived
+      'isArchived': isArchived,
+      'isStarred': isStarred
     };
   }
 }

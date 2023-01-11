@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/model/priority.dart';
@@ -18,8 +19,7 @@ class TimelineScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final taskProvider= Provider.of<TaskProvider>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('Tasks Timeline')),
-      body: ListView.builder(
+      body: taskProvider.dueDateTaskMap.length!=0?ListView.builder(
         itemCount: taskProvider.dueDateTaskMap.length,
         itemBuilder: (context, index) {
           List<Task> data = taskProvider.dueDateTaskMap.values.elementAt(index);
@@ -51,7 +51,10 @@ class TimelineScreen extends StatelessWidget {
             ),
           );
         },
-      ),
+      ):Center(child: Column(mainAxisAlignment:MainAxisAlignment.center,children: [
+        Text("No Pending Tasks",style: TextStyle(color: primaryColor,fontSize: 18),),
+        Image.asset('assets/images/completed.png',)
+      ],),),
     );
   }
 }

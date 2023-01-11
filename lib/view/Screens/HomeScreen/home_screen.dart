@@ -8,6 +8,7 @@ import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/constants/priority.dart';
 import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/model/task_model.dart';
+import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
@@ -54,19 +55,31 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-            width: displayWidth(context),
-            height: displayHeight(context) * 0.29,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (BuildContext, index) {
-                  return Column(
-                    children: [
-                      CategoryCard(),
-                    ],
-                  );
-                })),
+        Consumer<CategoryProvider>(builder: (context, controller, child) {
+          if(controller.categoryFetchStatus==CategoryFetchStatus.nil){
+            controller.fetchCategory();
+          }
+          switch(controller.categoryFetchStatus){
+            case CategoryFetchStatus.nil:
+              return Center(child: Text('not able to fetch'),);
+            case CategoryFetchStatus.loading:
+              return Center(child: CircularProgressIndicator(),);
+            case CategoryFetchStatus.fetched:
+              return Container(
+                  width: displayWidth(context),
+                  height: displayHeight(context) * 0.29,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.categoryList.length,
+                      itemBuilder: (BuildContext, index) {
+                        return Column(
+                          children: [
+                            CategoryCard(category: controller.categoryList.elementAt(index),),
+                          ],
+                        );
+                      }));
+          }
+        },),
         Expanded(
           child: Container(
               decoration: BoxDecoration(
@@ -98,11 +111,11 @@ class HomeScreen extends StatelessWidget {
                         case TaskFetchStatus.loading:
                           return Center(child: CircularProgressIndicator(),);
                         case TaskFetchStatus.fetched:
-                          return  controller.taskList.length!=0?Expanded(
+                          return  controller.taskList.where((element) => element.isArchived==false).toList().length!=0?Expanded(
                             child: ListView.builder(
-                              itemCount: controller.taskList.length,
+                              itemCount: controller.taskList.where((element) => element.isArchived==false).toList().length,
                               itemBuilder: (context, index) => TaskTile(
-                                task: controller.taskList[index],
+                                task: controller.taskList.where((element) => element.isArchived==false).toList().elementAt(index),
                               ),
                             ),
                           ):

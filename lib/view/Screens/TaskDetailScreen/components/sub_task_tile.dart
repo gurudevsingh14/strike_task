@@ -46,8 +46,9 @@ class _SubTaskTileState extends State<SubTaskTile> {
                     taskDataController.updateSubTask(taskDataController.selectedTask, widget.subtask);
                   });
                 }),
-                SizedBox(
-                  width: displayWidth(context)*0.5,
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  width: displayWidth(context)*0.73,
                     child: Text(widget.subtask.name??'',maxLines: 50,)),
                 // Expanded(child: Row(
                 //   mainAxisAlignment: MainAxisAlignment.end,
