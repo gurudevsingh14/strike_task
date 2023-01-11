@@ -21,7 +21,7 @@ class UserModel{
         uid: data['uid'],
         name: data['name'],
         taskList: data['taskList'],
-        category: List<String>.from(data['category']),
+        category: data['category']!=null?List<String>.from(data['category']):null,
         dp: data['dp'],
         cp: data['cp'],
         email: data['email'],

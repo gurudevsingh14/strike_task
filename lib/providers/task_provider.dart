@@ -18,6 +18,7 @@ class TaskProvider extends ChangeNotifier{
 
   Task get selectedTask => _selectedTask;
   TaskFetchStatus taskFetchStatus=TaskFetchStatus.nil;
+
   set selectedTask(Task value) {
     _selectedTask = value;
     notifyListeners();
@@ -25,9 +26,16 @@ class TaskProvider extends ChangeNotifier{
   List<Task>taskList=[];
   Map<DateTime,List<Task>>dueDateTaskMap={};
   void initializeDueDateTaskMap(){
+    dueDateTaskMap={};
     taskList.forEach((ele) { 
       dueDateTaskMap[ele.dueDate]!=null?dueDateTaskMap[ele.dueDate]!.add(ele):dueDateTaskMap[ele.dueDate!]=[ele];
     });
+  }
+  void updateProvider(List<Task>taskList){
+    print("-------------updating task Provider--------------");
+    this.taskList=taskList;
+    initializeDueDateTaskMap();
+    notifyListeners();
   }
   void addInDueDateTaskMap(Task task){
     dueDateTaskMap[task.dueDate]!=null?dueDateTaskMap[task.dueDate]!.add(task):dueDateTaskMap[task.dueDate!]=[task];
@@ -55,6 +63,8 @@ class TaskProvider extends ChangeNotifier{
   Future<void> fetchTask(String uid)async{
     taskFetchStatus=TaskFetchStatus.loading;
     try{
+      taskList=[];
+      dueDateTaskMap={};
       dynamic response=await GetApiService().service(endpoint: "tasks/$uid.json");
       if(response!=null){
         response.forEach((k,v) async {
@@ -186,7 +196,9 @@ class TaskProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-
+  int countOfCompletedTasks(){
+    return taskList.where((task) => task.isTaskCompleted()==true).toList().length;
+  }
   List<Task> getTaskOnSelectedDate(DateTime date) {
     int size=taskList.length;
     int count;

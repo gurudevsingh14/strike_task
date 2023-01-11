@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
 import 'package:strike_task/controller/priority_select_controller.dart';
@@ -55,6 +56,14 @@ class _StrikeTaskState extends State<StrikeTask> {
         ChangeNotifierProxyProvider<TaskProvider,UserProvider>(
             create: (context) => UserProvider(),
             update: (context, taskProvider, user) => user!..update(taskProvider.dueDateTaskMap),
+        ),
+        ChangeNotifierProxyProvider<CategoryProvider,TaskProvider>(
+          create: (context) => TaskProvider(),
+          update: (context, categoryProvider, taskProvider) => taskProvider!..updateProvider(categoryProvider.taskList)
+        ),
+        ChangeNotifierProxyProvider<TaskProvider,CategoryProvider>(
+            create: (context) => CategoryProvider(),
+            update: (context, taskProvider, categoryProvider) => categoryProvider!..taskList=taskProvider.taskList
         ),
       ],
       child: MaterialApp(

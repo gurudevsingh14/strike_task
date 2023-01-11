@@ -65,7 +65,7 @@ class HomeScreen extends StatelessWidget {
             case CategoryFetchStatus.loading:
               return Center(child: CircularProgressIndicator(),);
             case CategoryFetchStatus.fetched:
-              return Container(
+              return controller.categoryList.length!=0?Container(
                   width: displayWidth(context),
                   height: displayHeight(context) * 0.29,
                   child: ListView.builder(
@@ -77,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                             CategoryCard(category: controller.categoryList.elementAt(index),),
                           ],
                         );
-                      }));
+                      })):const SizedBox();
           }
         },),
         Expanded(

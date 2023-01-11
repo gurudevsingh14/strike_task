@@ -45,7 +45,51 @@ class ProfileScreen extends StatelessWidget {
             return Scaffold(
               body: Stack(
                 children: [
-                  Image.asset('assets/images/user-profile-bg.jpg'),
+                  InkWell(
+                    child: user.currentUser!.cp==null?Image.asset('assets/images/user-profile-bg.jpg'):
+                          CachedNetworkImage(
+                            width: displayWidth(context),
+                           imageUrl: user.currentUser!.cp!,
+                      ),
+                    onTap: () {
+                      showModalBottomSheet(
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (context) {
+                          return SingleChildScrollView(
+                            padding: EdgeInsets.zero,
+                            child: Column(
+                              children: [
+                                user.currentUser!.cp!=null?
+                                ListTile(
+                                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayFullImage(
+                                      imageurl: user.currentUser!.cp!,
+                                      caption: "Cover Picture",
+                                  ),)),
+                                  title: Text('View'),
+                                ):SizedBox(),
+                                ListTile(
+                                  title: Text("upload"),
+                                  onTap: ()async{
+                                    XFile? image=await _picker.pickImage(source: ImageSource.gallery);
+                                    await user.changeCp(File(image!.path));
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text("Remove"),
+                                  onTap: ()async{
+                                    await user.removeCp();
+                                    Navigator.pop(context);
+                                  },
+                                ),
+
+                              ],
+                            ),
+                          );
+                        },);
+                    },
+                  ),
                   Positioned(
                       top: 10,
                       left: 10,
@@ -91,8 +135,6 @@ class ProfileScreen extends StatelessWidget {
                           elevation: 10,
                           child:
                           (user.currentUser!.dp!=null)?
-
-
                           CircleAvatar(
                             radius: 40,
                             backgroundImage: CachedNetworkImageProvider(
@@ -102,11 +144,13 @@ class ProfileScreen extends StatelessWidget {
                           ):
                           CircleAvatar(
                             radius: 40,
-                            backgroundColor: primaryColor,
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage('assets/images/default_profile.png'),
                           ),
                         ),
                         onTap: () async {
                           showModalBottomSheet(
+                            backgroundColor: Colors.white,
                             context: context,
                             builder: (context) {
                             return SingleChildScrollView(
@@ -115,29 +159,32 @@ class ProfileScreen extends StatelessWidget {
                                 children: [
                                   user.currentUser!.dp!=null?
                                   ListTile(
-                                    visualDensity: VisualDensity(vertical: -2),
                                     onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => DisplayFullImage(
                                         imageurl: user.currentUser!.dp!,
-                                        caption: user.currentUser!.name!
+                                        caption: "Display Picture"
                                     ),)),
-                                    title: Text('view photo'),
+                                    title: Text('View'),
                                   ):SizedBox(),
                                   ListTile(
-                                    onTap: () {
+                                    title: Text("upload"),
+                                    onTap: ()async{
+                                      XFile? image=await _picker.pickImage(source: ImageSource.gallery);
+                                      await user.changeDp(File(image!.path));
+                                      Navigator.pop(context);
                                     },
-                                  )
+                                  ),
+                                  ListTile(
+                                    title: Text("Remove"),
+                                    onTap: ()async{
+                                      await user.removeDp();
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+
                                 ],
                               ),
                             );
                           },);
-                          // if(image!=null) {
-                          //   print("yaha tk ghusra");
-                          //   CroppedFile? croppedFile = await cropImage(File(image.path));
-                          //   print("------------");
-                          //   if (croppedFile != null) {
-                          //     controller.changeDp(File(croppedFile!.path));
-                          //   }
-                          // }
                         },
                       ),
                     ),
