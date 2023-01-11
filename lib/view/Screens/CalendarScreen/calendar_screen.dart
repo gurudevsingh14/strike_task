@@ -27,6 +27,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   List<Task> _getTasksOnSelectedDay(DateTime date) {
     return selectedTasks[date]??[];
   }
+  DateTime convertDate(DateTime date){
+    return DateTime(date.year,date.month,date.day,23,59,59);
+  }
   @override
   Widget build(BuildContext context) {
     final taskDataController = Provider.of<TaskProvider>(context);
@@ -38,7 +41,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         TableCalendar(
           calendarFormat: controller.calendarFormat,
           focusedDay: controller.focusedDay,
-          firstDay: DateTime.now(),
+          firstDay: DateTime(DateTime.now().year - 10),
           lastDay: DateTime(DateTime.now().year + 10),
           selectedDayPredicate: (day) {
             return isSameDay(controller.selectedDay, day);
@@ -82,7 +85,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20)),
             ),
-            child: taskDataController.taskList.length!=0?ListView(
+            child: taskDataController.dueDateTaskMap.containsKey(convertDate(controller.selectedDay))?ListView(
             children: [
             ...taskDataController.getTaskOnSelectedDate(controller.selectedDay).map((e) => TaskTile(task: e,)),
             ],

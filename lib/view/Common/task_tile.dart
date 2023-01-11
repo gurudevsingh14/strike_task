@@ -84,10 +84,10 @@ class TaskTile extends StatelessWidget {
                           SizedBox(
                             width: 10,
                           ),
-                          DaysLeftTag(
+                          task!.isTaskCompleted()==false?DaysLeftTag(
                             color: mutedTextColor,
                             dueDate: task!.dueDate,
-                          ),
+                          ):const SizedBox(),
                         ],
                       ),
                     ],
@@ -106,6 +106,26 @@ class TaskTile extends StatelessWidget {
               ),
             ),
           ),
+          startActionPane: task!.isSubTasksCompleted()==false?ActionPane(
+              extentRatio: 0.28,
+              motion: DrawerMotion(),
+              children: [
+                SlidableAction(
+                    onPressed: (context) async {
+                      if(task!.isTaskCompleted()==false)
+                        await taskDataController.markTaskAsCompleted(task!);
+                      else
+                        await taskDataController.unMarkTaskAsCompleted(task!);
+                    },
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
+                    icon: task!.markedCompleted==true?Icons.done:Icons.done_outline,
+                    label: task!.markedCompleted==true?"UnMark":"Mark Done",
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10)),
+                )
+              ]):null,
           endActionPane: ActionPane(
             extentRatio: 1/1.3,
             motion: DrawerMotion(),

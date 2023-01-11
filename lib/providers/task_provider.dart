@@ -24,6 +24,7 @@ class TaskProvider extends ChangeNotifier{
     notifyListeners();
   }
   List<Task>taskList=[];
+  List<Task>archivedTaskList=[];
   Map<DateTime,List<Task>>dueDateTaskMap={};
   void initializeDueDateTaskMap(){
     dueDateTaskMap={};
@@ -70,8 +71,14 @@ class TaskProvider extends ChangeNotifier{
         response.forEach((k,v) async {
           Task task=Task.fromJson(v);
           await fetchSubTasks(task);
-          taskList.add(task);
-          addInDueDateTaskMap(task);
+          if(task.isArchived==true){
+            archivedTaskList.add(task);
+          }else{
+            taskList.add(task);
+            if(task.dueDate!.year>=DateTime.now().year&&task.dueDate!.month>=DateTime.now().month&&task.dueDate!.day>=DateTime.now().day){
+              addInDueDateTaskMap(task);
+            }
+          }
         });
       }
     }catch(e){
@@ -125,15 +132,23 @@ class TaskProvider extends ChangeNotifier{
     int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
     taskList[index].isArchived = true;
     Future.delayed(Duration(microseconds: 1));
-    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index]);
+    archivedTaskList.add(taskList[index]);
+    deleteFromDueDateTaskMap(taskList[index]);
+    taskList.removeAt(index);
+    notifyListeners();
   }
 
   unArchiveTask(Task taskToUpdate)async{
-    int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
-    taskList[index].isArchived = false;
+    int index = archivedTaskList.indexWhere((element) => element.id == taskToUpdate.id);
+    archivedTaskList[index].isArchived = false;
     notifyListeners();
     Future.delayed(Duration(microseconds: 1));
-    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,archivedTaskList[index] );
+    taskList.add(archivedTaskList[index]);
+    addInDueDateTaskMap(archivedTaskList[index]);
+    archivedTaskList.removeAt(index);
+    notifyListeners();
   }
   starTask(Task task)async{
     task.isStarred=!task.isStarred!;
@@ -224,7 +239,13 @@ class TaskProvider extends ChangeNotifier{
           await DeleteService().service("subTasks/${task.id}.json");
         }
       });
+      archivedTaskList.forEach((task)async{
+        if(task.category==category){
+          await DeleteService().service("subTasks/${task.id}.json");
+        }
+      });
       taskList.removeWhere((task) => task.category==category);
+      archivedTaskList.removeWhere((task) => task.category==category);
       dynamic response=PutService().service(endpoint: "tasks/$uid.json",
           body: Map.fromIterable(taskList,key: (task) => task.id,value: (task) => task.toJson(),));
       if(response!=null){
@@ -235,5 +256,15 @@ class TaskProvider extends ChangeNotifier{
       print(e.toString());
     }
     notifyListeners();
+  }
+  Future<void> markTaskAsCompleted(Task task)async{
+    final uid=FirebaseAuth.instance.currentUser!.uid;
+    task.markedCompleted=true;
+    await updateTask(uid, task);
+  }
+  Future<void> unMarkTaskAsCompleted(Task task)async{
+    final uid=FirebaseAuth.instance.currentUser!.uid;
+    task.markedCompleted=false;
+    await updateTask(uid, task);
   }
 }

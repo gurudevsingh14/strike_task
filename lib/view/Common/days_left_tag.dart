@@ -15,12 +15,19 @@ class DaysLeftTag extends StatelessWidget {
     int days=duration.days;
     if(years==0){
       if(months==0){
-        return days<=1?'$days day':'$days days';
-      } else {
-        return months == 1 ? '$months month' : '$months months';
+        if(days>=0)
+        return days<=1?'$days day left':'$days days left';
+        else
+          return "passed due";
+      } else if(months>0) {
+        return months == 1 ? '$months month left' : '$months months left';
+      } else{
+        return "passed due";
       }
+    }else if(years>0){
+      return years==1?'$years year left':'$years years left';
     }else{
-      return years==1?'$years year':'$years years';
+      return "passed due";
     }
   }
 
@@ -35,7 +42,7 @@ class DaysLeftTag extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(vertical: 2,horizontal: 3),
         // width: 64,
-        child: Text('${durationLeft(dueDate??DateTime.now())!} left',maxLines: 2,style: TextStyle(fontSize: 12,color: color),)
+        child: Text('${durationLeft(dueDate??DateTime.now())!}',maxLines: 2,style: TextStyle(fontSize: 12,color: color),)
     );
   }
 }

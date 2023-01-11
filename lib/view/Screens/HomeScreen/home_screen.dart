@@ -145,11 +145,11 @@ class HomeScreen extends StatelessWidget {
                             ),
                           );
                         case TaskFetchStatus.fetched:
-                          return  controller.taskList.where((element) => element.isArchived==false).toList().length!=0?Expanded(
+                          return  controller.taskList.length!=0?Expanded(
                             child: ListView.builder(
-                              itemCount: controller.taskList.where((element) => element.isArchived==false).toList().length,
+                              itemCount: controller.taskList.length,
                               itemBuilder: (context, index) => TaskTile(
-                                task: controller.taskList.where((element) => element.isArchived==false).toList().elementAt(index),
+                                task: controller.taskList[index]
                               ),
                             ),
                           ):

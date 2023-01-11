@@ -22,10 +22,10 @@ class ArchivedTasks extends StatelessWidget {
           decoration: BoxDecoration(
               color: primayLightColor.withOpacity(0.3)
           ),
-          child: taskController.taskList.where((element) => element.isArchived!).toList().length!=0?ListView.builder(
-            itemCount: taskController.taskList.where((element) => element.isArchived!).toList().length,
+          child: taskController.archivedTaskList.length!=0?ListView.builder(
+            itemCount: taskController.archivedTaskList.length,
             itemBuilder: (context, index) {
-              return TaskTile(task: taskController.taskList.where((element) => element.isArchived!).toList().elementAt(index),);
+              return TaskTile(task: taskController.archivedTaskList[index],);
             },):Center(child: Text("No Tasks",style: TextStyle(color: Colors.white70,fontSize: 18),),),
         ),
       ),
