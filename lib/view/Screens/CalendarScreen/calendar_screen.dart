@@ -8,6 +8,7 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../constants/check_date.dart';
 import '../../../model/task_model.dart';
 import '../TaskDetailScreen/components/sub_task_tile.dart';
 
@@ -38,7 +39,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
         TableCalendar(
           calendarFormat: controller.calendarFormat,
           focusedDay: controller.focusedDay,
-          firstDay: DateTime.now(),
+          firstDay: DateTime(DateTime.now().year - 10),
           lastDay: DateTime(DateTime.now().year + 10),
           selectedDayPredicate: (day) {
             return isSameDay(controller.selectedDay, day);
@@ -82,7 +83,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20)),
             ),
-            child: taskDataController.taskList.length!=0?ListView(
+            child: taskDataController.dueDateTaskMap.containsKey(convertDate(controller.selectedDay))?ListView(
             children: [
             ...taskDataController.getTaskOnSelectedDate(controller.selectedDay).map((e) => TaskTile(task: e,)),
             ],

@@ -13,6 +13,7 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/body_with_appbar.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:strike_task/view/Common/catergory_card.dart';
+import 'package:strike_task/view/uitls/shimmer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   String restrictFractionalSeconds(String dateTime) =>
@@ -21,6 +22,20 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth=FirebaseAuth.instance;
+    Widget buildCardShimmer(){
+      return ShimmerWidget.circular(
+        height: displayHeight(context)*0.265,
+        width: displayWidth(context)*0.47,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+      );
+    }
+    Widget buildTaskShimmer(){
+      return ShimmerWidget.circular(
+          width: displayWidth(context)*0.65,
+          height: 90,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+      );
+    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -63,9 +78,21 @@ class HomeScreen extends StatelessWidget {
             case CategoryFetchStatus.nil:
               return Center(child: Text('not able to fetch'),);
             case CategoryFetchStatus.loading:
-              return Center(child: CircularProgressIndicator(),);
-            case CategoryFetchStatus.fetched:
               return Container(
+                  width: displayWidth(context),
+                  height: displayHeight(context) * 0.29,
+                  child: Row(
+                    children: [
+                      Spacer(),
+                      buildCardShimmer(),
+                      Spacer(),
+                      buildCardShimmer(),
+                      Spacer(),
+                    ],
+                  )
+              );
+            case CategoryFetchStatus.fetched:
+              return controller.categoryList.length!=0?Container(
                   width: displayWidth(context),
                   height: displayHeight(context) * 0.29,
                   child: ListView.builder(
@@ -77,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                             CategoryCard(category: controller.categoryList.elementAt(index),),
                           ],
                         );
-                      }));
+                      })):const SizedBox();
           }
         },),
         Expanded(
@@ -109,13 +136,20 @@ class HomeScreen extends StatelessWidget {
                         case TaskFetchStatus.nil:
                           return Center(child: Text('not able to fetch'),);
                         case TaskFetchStatus.loading:
-                          return Center(child: CircularProgressIndicator(),);
+                          return Expanded(
+                            child: ListView.separated(
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (context, index) => buildTaskShimmer(),
+                                separatorBuilder: (context, index) => SizedBox(height: 8,),
+                                itemCount: 5
+                            ),
+                          );
                         case TaskFetchStatus.fetched:
-                          return  controller.taskList.where((element) => element.isArchived==false).toList().length!=0?Expanded(
+                          return  controller.taskList.length!=0?Expanded(
                             child: ListView.builder(
-                              itemCount: controller.taskList.where((element) => element.isArchived==false).toList().length,
+                              itemCount: controller.taskList.length,
                               itemBuilder: (context, index) => TaskTile(
-                                task: controller.taskList.where((element) => element.isArchived==false).toList().elementAt(index),
+                                task: controller.taskList[index]
                               ),
                             ),
                           ):

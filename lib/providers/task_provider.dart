@@ -18,16 +18,25 @@ class TaskProvider extends ChangeNotifier{
 
   Task get selectedTask => _selectedTask;
   TaskFetchStatus taskFetchStatus=TaskFetchStatus.nil;
+
   set selectedTask(Task value) {
     _selectedTask = value;
     notifyListeners();
   }
   List<Task>taskList=[];
+  List<Task>archivedTaskList=[];
   Map<DateTime,List<Task>>dueDateTaskMap={};
   void initializeDueDateTaskMap(){
+    dueDateTaskMap={};
     taskList.forEach((ele) { 
       dueDateTaskMap[ele.dueDate]!=null?dueDateTaskMap[ele.dueDate]!.add(ele):dueDateTaskMap[ele.dueDate!]=[ele];
     });
+  }
+  void updateProvider(List<Task>taskList){
+    print("-------------updating task Provider--------------");
+    this.taskList=taskList;
+    initializeDueDateTaskMap();
+    notifyListeners();
   }
   void addInDueDateTaskMap(Task task){
     dueDateTaskMap[task.dueDate]!=null?dueDateTaskMap[task.dueDate]!.add(task):dueDateTaskMap[task.dueDate!]=[task];
@@ -55,13 +64,21 @@ class TaskProvider extends ChangeNotifier{
   Future<void> fetchTask(String uid)async{
     taskFetchStatus=TaskFetchStatus.loading;
     try{
+      taskList=[];
+      dueDateTaskMap={};
       dynamic response=await GetApiService().service(endpoint: "tasks/$uid.json");
       if(response!=null){
         response.forEach((k,v) async {
           Task task=Task.fromJson(v);
           await fetchSubTasks(task);
-          taskList.add(task);
-          addInDueDateTaskMap(task);
+          if(task.isArchived==true){
+            archivedTaskList.add(task);
+          }else{
+            taskList.add(task);
+            if(task.dueDate!.year>=DateTime.now().year&&task.dueDate!.month>=DateTime.now().month&&task.dueDate!.day>=DateTime.now().day){
+              addInDueDateTaskMap(task);
+            }
+          }
         });
       }
     }catch(e){
@@ -115,15 +132,23 @@ class TaskProvider extends ChangeNotifier{
     int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
     taskList[index].isArchived = true;
     Future.delayed(Duration(microseconds: 1));
-    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index]);
+    archivedTaskList.add(taskList[index]);
+    deleteFromDueDateTaskMap(taskList[index]);
+    taskList.removeAt(index);
+    notifyListeners();
   }
 
   unArchiveTask(Task taskToUpdate)async{
-    int index = taskList.indexWhere((element) => element.id == taskToUpdate.id);
-    taskList[index].isArchived = false;
+    int index = archivedTaskList.indexWhere((element) => element.id == taskToUpdate.id);
+    archivedTaskList[index].isArchived = false;
     notifyListeners();
     Future.delayed(Duration(microseconds: 1));
-    await updateTask(FirebaseAuth.instance.currentUser!.uid,taskList[index] );
+    await updateTask(FirebaseAuth.instance.currentUser!.uid,archivedTaskList[index] );
+    taskList.add(archivedTaskList[index]);
+    addInDueDateTaskMap(archivedTaskList[index]);
+    archivedTaskList.removeAt(index);
+    notifyListeners();
   }
   starTask(Task task)async{
     task.isStarred=!task.isStarred!;
@@ -186,7 +211,9 @@ class TaskProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
-
+  int countOfCompletedTasks(){
+    return taskList.where((task) => task.isTaskCompleted()==true).toList().length;
+  }
   List<Task> getTaskOnSelectedDate(DateTime date) {
     int size=taskList.length;
     int count;
@@ -203,5 +230,41 @@ class TaskProvider extends ChangeNotifier{
         }
     }
     return temp;
+  }
+  Future<void> deleteAllTaskWithCategory(String category)async{
+    try{
+      final uid=FirebaseAuth.instance.currentUser!.uid;
+      taskList.forEach((task)async{
+        if(task.category==category){
+          await DeleteService().service("subTasks/${task.id}.json");
+        }
+      });
+      archivedTaskList.forEach((task)async{
+        if(task.category==category){
+          await DeleteService().service("subTasks/${task.id}.json");
+        }
+      });
+      taskList.removeWhere((task) => task.category==category);
+      archivedTaskList.removeWhere((task) => task.category==category);
+      dynamic response=PutService().service(endpoint: "tasks/$uid.json",
+          body: Map.fromIterable(taskList,key: (task) => task.id,value: (task) => task.toJson(),));
+      if(response!=null){
+        initializeDueDateTaskMap();
+        print("------------deleted all tasks-------------");
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  Future<void> markTaskAsCompleted(Task task)async{
+    final uid=FirebaseAuth.instance.currentUser!.uid;
+    task.markedCompleted=true;
+    await updateTask(uid, task);
+  }
+  Future<void> unMarkTaskAsCompleted(Task task)async{
+    final uid=FirebaseAuth.instance.currentUser!.uid;
+    task.markedCompleted=false;
+    await updateTask(uid, task);
   }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../enum/enums.dart';
+import '../model/task_model.dart';
 import '../services/api_services/delete_service.dart';
 import '../services/api_services/get_service.dart';
 import '../services/api_services/post_service.dart';
@@ -17,9 +18,11 @@ class CategoryProvider extends ChangeNotifier{
     notifyListeners();
   }
   List<String>categoryList=[];
+  List<Task>taskList=[];
   Future<void> fetchCategory()async{
     categoryFetchStatus=CategoryFetchStatus.loading;
     try{
+      categoryList=[];
       String uid=FirebaseAuth.instance.currentUser!.uid;
       dynamic response=await GetApiService().service(endpoint: "users/$uid/category.json");
       if(response!=null){

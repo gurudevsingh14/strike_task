@@ -12,18 +12,23 @@ class Task{
   DateTime? dueDate;
   String? priority;
   bool? isArchived;
+  bool? markedCompleted;
   List<SubTask>? subTaskList=[];
   bool? isStarred;
   Task({this.id, this.name,this.category, this.description, this.dueDate,
-      this.priority,this.isArchived=false,this.isStarred=false});
+      this.priority,this.isArchived=false,this.isStarred=false,this.markedCompleted=false});
 
-  bool isTaskCompleted(){
+  bool isSubTasksCompleted(){
     int count=0;
     if(subTaskList==null||subTaskList!.length==0) return false;
     subTaskList!.forEach((ele) {
       if(ele.done)count++;
     });
     return subTaskList!.length==count;
+  }
+  bool isTaskCompleted(){
+    if(markedCompleted==true) return true;
+    return isSubTasksCompleted();
   }
   double completePercentage(){
     int count=0;
@@ -42,7 +47,8 @@ class Task{
         dueDate: DateTime.parse(data['dueDate']),
         priority: data['priority'],
         isArchived: data['isArchived'],
-        isStarred: data['isStarred']
+        isStarred: data['isStarred'],
+        markedCompleted: data['markedCompleted'],
         );
   }
 
@@ -55,7 +61,8 @@ class Task{
       'dueDate': dueDate.toString(),
       'priority': priority,
       'isArchived': isArchived,
-      'isStarred': isStarred
+      'isStarred': isStarred,
+      'markedCompleted': markedCompleted
     };
   }
 }

@@ -13,21 +13,21 @@ import '../../model/menu_item_model.dart';
 class CategoryCard extends StatelessWidget {
   String? category;
   CategoryCard({this.category});
+  double calCompletePercentage(List<Task>taskList){
+    List<Task>categoryTasks=taskList.where((task) => task.category==category).toList();
+    int length=categoryTasks.length;
+    if(length==0) return 0;
+    double sumOfCompletePercentage=0;
+    categoryTasks.forEach((task) {
+      sumOfCompletePercentage+=task.completePercentage();
+    });
+    double avg=sumOfCompletePercentage/length;
+    return avg;
+  }
   @override
   Widget build(BuildContext context) {
     final categoryProvider=Provider.of<CategoryProvider>(context);
     final taskProvider=Provider.of<TaskProvider>(context);
-    double calCompletePercentage(List<Task>taskList){
-      List<Task>categoryTasks=taskList.where((task) => task.category==category).toList();
-      int length=categoryTasks.length;
-      if(length==0) return 0;
-      double sumOfCompletePercentage=0;
-      categoryTasks.forEach((task) {
-        sumOfCompletePercentage+=task.completePercentage();
-      });
-      double avg=sumOfCompletePercentage/length;
-      return avg;
-    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -58,13 +58,30 @@ class CategoryCard extends StatelessWidget {
                     height: 16,
                     width: 20,
                     child: PopupMenuButton<MenuItemModel>(
+                      onSelected: (value) {
+                        print("hii");
+                      },
                       padding: EdgeInsets.zero,
                         icon: Icon(Icons.more_vert,size: 18,color: whiteColor,),
                         itemBuilder: (context) => [
                           PopupMenuItem(
                             child: Row( children: [Icon(Icons.delete_outline),Text('delete')],),
-                            onTap: () async {
-                              await categoryProvider.deleteCategory(category!);
+                            onTap: () {
+                              Future.delayed(
+                                  Duration.zero,
+                                      () => showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: Text('Deleting a Category will delete all Tasks of that Category',style: TextStyle(fontSize: 14),),
+                                          actions: [
+                                            TextButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancel'),),
+                                            TextButton(onPressed: ()async{
+                                              await categoryProvider.deleteCategory(category!);
+                                              await taskProvider.deleteAllTaskWithCategory(category!);
+                                              Navigator.pop(context);}, child: Text('Delete'),)
+                                          ],),
+                                      )
+                              );
                             },
                           )
                         ],
@@ -105,8 +122,8 @@ class CategoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-
-                      child: Text('3/4 completed',maxLines: 1,style: TextStyle(color: whiteColor))
+                      child: Text('${taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()==true).toList().length}/'
+                          '${taskProvider.taskList.where((task) => task.category==category).toList().length} done',maxLines: 1,style: TextStyle(color: whiteColor))
                   ),
                   DaysLeftTag(color: whiteColor),
                 ],

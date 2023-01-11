@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/global_context.dart';
 import 'package:strike_task/enum/enums.dart';
 import 'package:strike_task/providers/task_provider.dart';
+import 'package:strike_task/services/api_services/delete_service.dart';
 import 'package:strike_task/services/api_services/get_service.dart';
 import 'package:strike_task/services/api_services/put_service.dart';
 import 'package:strike_task/model/user_model.dart';
@@ -120,6 +121,38 @@ class UserProvider extends ChangeNotifier {
       if(response!=null){
         currentUser!.dp=url;
       }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  Future<void> removeDp()async{
+    try{
+      dynamic response=await DeleteService().service('users/${currentUser!.uid}/dp.json');
+      currentUser!.dp=null;
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  Future<void> changeCp(File image)async{
+    try{
+      String? url=await getImageUrl(image,"users/${currentUser!.uid!}/cp");
+      print(url);
+      dynamic response=await UpdateService().service(endpoint: 'users/${currentUser!.uid}.json', body: {'cp':url});
+      print(response.toString());
+      if(response!=null){
+        currentUser!.cp=url;
+      }
+    }catch(e){
+      print(e.toString());
+    }
+    notifyListeners();
+  }
+  Future<void> removeCp()async{
+    try{
+      dynamic response=await DeleteService().service('users/${currentUser!.uid}/cp.json');
+      currentUser!.cp=null;
     }catch(e){
       print(e.toString());
     }
