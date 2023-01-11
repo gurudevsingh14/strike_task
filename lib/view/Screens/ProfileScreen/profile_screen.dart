@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:strike_task/constants/check_date.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/enum/enums.dart';
@@ -18,14 +19,37 @@ import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Common/percentage_indicator.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/archived_tasks.dart';
+import 'package:strike_task/view/Screens/ProfileScreen/components/daily_tasks.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/display_full_image.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/starred_tasks.dart';
 
+import '../../../model/task_model.dart';
 import '../../uitls/helper_widget.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
   @override
+  double calDailyCompletePercentage(List<Task>?taskList){
+    if(taskList==null) return 0/0;
+    int length=taskList.length;
+    double sum=0;
+    taskList.forEach((task) {
+      sum+=task.completePercentage();
+    });
+    return sum/(length==0?1:length);
+  }
+  int todaysCompletedTasks(List<Task>taskList){
+    int count=0;
+    taskList.forEach((task) {
+      if(task.isTaskCompleted()==true) count++;
+    });
+    return count;
+  }
+  int todaysPendingTasks(List<Task>taskList){
+    int count=todaysCompletedTasks(taskList);
+    int length=taskList.length==0?1:taskList.length;
+    return length-count;
+  }
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context);
     final taskController=Provider.of<TaskProvider>(context);
@@ -337,7 +361,7 @@ class ProfileScreen extends StatelessWidget {
                                           SizedBox(
                                             height: 8,
                                           ),
-                                          Row(
+                                          taskController.dueDateTaskMap[convertDate(DateTime.now())]!=null?Row(
                                             children: [
                                               Text(
                                                 'Completed',
@@ -354,11 +378,14 @@ class ProfileScreen extends StatelessWidget {
                                                     BorderRadius.circular(100),
                                                     color: Colors.green.shade300),
                                                 child: Text(
-                                                  '33',
+                                                  '${todaysCompletedTasks(taskController.dueDateTaskMap[convertDate(DateTime.now())]!)}',
                                                   style: TextStyle(color: whiteColor),
                                                 ),
                                               )
                                             ],
+                                          ):Text(
+                                            'No Tasks Today',
+                                            style: TextStyle(color: mutedTextColor),
                                           ),
                                           SizedBox(
                                             height: 8,
@@ -374,7 +401,7 @@ class ProfileScreen extends StatelessWidget {
                                           //     )
                                           //   ],
                                           // ),
-                                          Row(
+                                          taskController.dueDateTaskMap[convertDate(DateTime.now())]!=null?Row(
                                             children: [
                                               Text('Pending',
                                                   style:
@@ -389,12 +416,14 @@ class ProfileScreen extends StatelessWidget {
                                                     borderRadius:
                                                     BorderRadius.circular(100),
                                                     color: Colors.yellow.shade300),
-                                                child: Text('30',
+                                                child: Text('${todaysPendingTasks(taskController.dueDateTaskMap[convertDate(DateTime.now())]!)}',
                                                     style:
                                                     TextStyle(color: whiteColor)),
                                               )
                                             ],
-                                          ),
+                                          ):Text('add Tasks to maintain streak',
+                                              style:
+                                              TextStyle(color: mutedTextColor)),
                                           SizedBox(
                                             height: 5,
                                           ),
@@ -403,13 +432,22 @@ class ProfileScreen extends StatelessWidget {
                                             height: 30,
                                             width: displayWidth(context) * 0.36,
                                             radius: 40,
+                                            callBack: () {
+                                              showModalBottomSheet(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(25)
+                                                ),
+                                                context: context, builder: (context) {
+                                                return DailyTasks();
+                                              },);
+                                            },
                                           ),
                                         ],
                                       ),
                                       Spacer(),
                                       PercentageIndicator(
                                         radius: displayWidth(context) * 0.11,
-                                        percentage: 0.7,
+                                        percentage: calDailyCompletePercentage(taskController.dueDateTaskMap[convertDate(DateTime.now())])/100,
                                         lineWidth: 8,
                                       ),
                                       SizedBox(

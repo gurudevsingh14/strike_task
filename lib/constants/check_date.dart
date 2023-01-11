@@ -68,3 +68,6 @@ bool isDateConsecutive(DateTime prevDate,DateTime currDate){
     }
   }
 }
+DateTime convertDate(DateTime date){
+  return DateTime(date.year,date.month,date.day,23,59,59);
+}

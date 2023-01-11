@@ -8,6 +8,7 @@ import 'package:strike_task/providers/task_provider.dart';
 import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../constants/check_date.dart';
 import '../../../model/task_model.dart';
 import '../TaskDetailScreen/components/sub_task_tile.dart';
 
@@ -26,9 +27,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   }
   List<Task> _getTasksOnSelectedDay(DateTime date) {
     return selectedTasks[date]??[];
-  }
-  DateTime convertDate(DateTime date){
-    return DateTime(date.year,date.month,date.day,23,59,59);
   }
   @override
   Widget build(BuildContext context) {
