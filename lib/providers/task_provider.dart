@@ -18,7 +18,6 @@ class TaskProvider extends ChangeNotifier{
 
   Task get selectedTask => _selectedTask;
   TaskFetchStatus taskFetchStatus=TaskFetchStatus.nil;
-
   set selectedTask(Task value) {
     _selectedTask = value;
     notifyListeners();
@@ -266,5 +265,11 @@ class TaskProvider extends ChangeNotifier{
     final uid=FirebaseAuth.instance.currentUser!.uid;
     task.markedCompleted=false;
     await updateTask(uid, task);
+  }
+  void disposeValues() {
+    taskFetchStatus=TaskFetchStatus.nil;
+    taskList=[];
+    dueDateTaskMap={};
+    archivedTaskList=[];
   }
 }

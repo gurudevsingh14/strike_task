@@ -159,5 +159,9 @@ class UserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void disposeValues() {
+    currentUser=null;
+    _profileStatus=ProfileStatus.nil;
+  }
 }
 

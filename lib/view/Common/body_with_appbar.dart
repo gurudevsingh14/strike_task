@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pandabar/main.view.dart';
 import 'package:pandabar/model.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_connection_checker/simple_connection_checker.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/controller/connection_controller.dart';
 import 'package:strike_task/controller/screen_controller.dart';
 import 'package:strike_task/view/Common/create_task_modal.dart';
 
@@ -12,6 +14,7 @@ class BodyWithAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ScreenController>(context);
+    final connection=Provider.of<ConnectionController>(context);
     return SafeArea(
       child: Scaffold(
         extendBody: true,
@@ -37,7 +40,14 @@ class BodyWithAppBar extends StatelessWidget {
             //     builder: (BuildContext context){
             //   return CreateTaskModal();
             // });
+            if(connection.connection==true)
              Navigator.pushNamed(context, '/CreateTask');
+            else{
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.red,
+                  content: Text("No internet!!",style: TextStyle(color: Colors.white),)
+              ));
+            }
           },
           onChange: (value){
             controller.currScreen=value;

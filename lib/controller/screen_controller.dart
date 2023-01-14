@@ -9,4 +9,7 @@ class ScreenController extends ChangeNotifier{
     _currScreen = value;
     notifyListeners();
   }
+  void disposeValues() {
+    _currScreen=0;
+  }
 }
