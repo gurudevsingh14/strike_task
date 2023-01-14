@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:strike_task/constants/check_date.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
 import 'package:strike_task/model/task_model.dart';
@@ -28,6 +31,21 @@ class CategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoryProvider=Provider.of<CategoryProvider>(context);
     final taskProvider=Provider.of<TaskProvider>(context);
+    DateTime? getUpcomingTaskDueDate(String category){
+      if(taskProvider.taskList.where((task) => task.category==category).toList().length==0) return null;
+      List<Task>taskList=taskProvider.taskList.where((task) => task.category==category).toList();
+      DateTime date=taskList[0].dueDate!;
+      taskList.forEach((task) {
+        if(compareDate(date, task.dueDate!)==1) date=task.dueDate!;
+      });
+      return date;
+    }
+    String? getUpcomingTaskDueDateString(String category){
+      if(taskProvider.taskList.where((task) => task.category==category).toList().length==0) return null;
+      DateTime date=getUpcomingTaskDueDate(category)!;
+      List<String>months=["","jan","feb","march","april","may","june","july","aug","sept","dec"];
+      return '${date.day} ${months[date.month]} ${date.year}';
+    }
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -53,7 +71,7 @@ class CategoryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('12 june 2020',style: TextStyle(color: whiteColor),),
+                  Text(getUpcomingTaskDueDateString(category!)??"No Tasks",style: TextStyle(color: whiteColor),),
                   Container(
                     height: 16,
                     width: 20,
@@ -125,7 +143,7 @@ class CategoryCard extends StatelessWidget {
                       child: Text('${taskProvider.taskList.where((task) => task.category==category&&task.isTaskCompleted()==true).toList().length}/'
                           '${taskProvider.taskList.where((task) => task.category==category).toList().length} done',maxLines: 1,style: TextStyle(color: whiteColor))
                   ),
-                  DaysLeftTag(color: whiteColor),
+                  getUpcomingTaskDueDate(category!)!=null?DaysLeftTag(color: whiteColor,dueDate: getUpcomingTaskDueDate(category!),):const SizedBox(),
                 ],
               )
             ],

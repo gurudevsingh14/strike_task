@@ -26,7 +26,7 @@ class TimelineScreen extends StatelessWidget {
           DateTime date=taskProvider.dueDateTaskMap.keys.elementAt(index);
           return Center(
             child: Container(
-              width: 360.0,
+              width: displayWidth(context)*0.95,
               child: Card(
                 margin: EdgeInsets.all(20.0),
                 child: Column(

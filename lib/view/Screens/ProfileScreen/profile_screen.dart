@@ -21,6 +21,7 @@ import 'package:strike_task/view/Common/task_tile.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/archived_tasks.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/daily_tasks.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/display_full_image.dart';
+import 'package:strike_task/view/Screens/ProfileScreen/components/profile_shimmer.dart';
 import 'package:strike_task/view/Screens/ProfileScreen/components/starred_tasks.dart';
 
 import '../../../model/task_model.dart';
@@ -51,20 +52,19 @@ class ProfileScreen extends StatelessWidget {
     return length-count;
   }
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context);
     final taskController=Provider.of<TaskProvider>(context);
     final _auth = AuthService(FirebaseAuth.instance, context);
     final ImagePicker _picker=ImagePicker();
     return Consumer<UserProvider>(
-      builder: (context, controller, child) {
-        if(controller.getProfileStatus==ProfileStatus.nil){
-          controller.setUser(FirebaseAuth.instance.currentUser!.uid);
+      builder: (context, user, child) {
+        if(user.getProfileStatus==ProfileStatus.nil){
+          user.setUser(FirebaseAuth.instance.currentUser!.uid);
         }
-        switch(controller.getProfileStatus){
+        switch(user.getProfileStatus!){
           case ProfileStatus.nil:
             return Center(child: Text('not able to fetch'),);
           case ProfileStatus.loading:
-            return Center(child: CircularProgressIndicator(),);
+            return ProfileShimmer();
           case ProfileStatus.fetched:
             return Scaffold(
               body: Stack(
@@ -116,7 +116,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   Positioned(
                       top: 10,
-                      left: 10,
+                      right: 10,
                       child: CircleAvatar(
                           backgroundColor: primaryColor,
                           radius: 23,
@@ -128,7 +128,7 @@ class ProfileScreen extends StatelessWidget {
                                 await _auth.signOut();
                                 Navigator.pushReplacementNamed(context, '/LoginScreen');
                               },
-                              icon: Icon(Icons.arrow_back_outlined))))
+                              icon: Icon(Icons.logout))))
                 ],
               ),
               bottomSheet: Container(
@@ -559,7 +559,6 @@ class ProfileScreen extends StatelessWidget {
               ),
             );
         }
-        return Scaffold();
       },
     );
   }

@@ -6,7 +6,7 @@ class ShimmerWidget extends StatelessWidget {
   double height;
   ShapeBorder shape;
 
-  ShimmerWidget.rectangle({required this.width,required this.height}):this.shape=  RoundedRectangleBorder();
+  ShimmerWidget.rectangle({required this.width,required this.height}):shape=  RoundedRectangleBorder();
 
   ShimmerWidget.circular({required this.width,required this.height,this.shape=const CircleBorder()});
 
@@ -17,12 +17,12 @@ class ShimmerWidget extends StatelessWidget {
           width: width,
           height: height,
           decoration: ShapeDecoration(
-              color: Colors.grey.shade400,
+              color: Colors.black.withOpacity(0.08),
               shape: shape,
           )
         ),
-        baseColor: Colors.grey.shade400,
-        highlightColor: Colors.grey.shade300
+        baseColor: Colors.black54,
+        highlightColor: Colors.black
     );
   }
 }
