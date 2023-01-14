@@ -1,7 +1,15 @@
 # strike_task
 
-A task management application
+A task management application<br>
+<img src="assets/video/strike_task_gif.gif" height=600px>
 
+Screens: <br>
+<span><img src="assets/images/screenshots/home_screen.png" height=600px></span>
+<span><img src="assets/images/screenshots/calendar_screen.png" height=600px></span>
+<span><img src="assets/images/screenshots/timeline_screen.png" height=600px></span>
+<span><img src="assets/images/screenshots/profile_screen.png" height=600px></span>
+<span><img src="assets/images/screenshots/task_detail_screen.png" height=600px></span>
+<span><img src="assets/images/screenshots/create_task_screen.png" height=600px></span>
 ## Getting Started
 
 This project is a starting point for a Flutter application.
