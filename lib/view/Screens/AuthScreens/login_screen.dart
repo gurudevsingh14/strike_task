@@ -62,17 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         // SizedBox(height: displayHeight(context)*0.2,),
                         SizedBox(height: displayWidth(context)*0.09,),
                         Text("Welcome Back",style: TextStyle(fontSize: 34,fontWeight: FontWeight.w500,color: whiteColor),),
-                        SizedBox(height: displayHeight(context)*0.03,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                          Text("Login with your account", style: TextStyle(color: whiteColor,fontSize: 14),),
-                            Text("   or   ", style: TextStyle(color: whiteColor,fontSize: 14),),
-                          InkWell(child: Text("skip", style: TextStyle(color: whiteColor,fontSize: 14,fontWeight: FontWeight.bold),),
-                          onTap: (){
-                            Navigator.pushReplacementNamed(context, '/HomeScreen');
-                          }),
-                        ],),
                         SizedBox(height: displayHeight(context)*0.05,),
                         GradientTextField(
                             validator: (value) {
@@ -86,15 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,),textController: password,obsureText: true,),
                         SizedBox(height: 5,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            InkWell(
-                            child: Text(
-                              "Forgot Password?",style: TextStyle(color: whiteColor),
-                            ),
-                          )],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     InkWell(
+                        //     child: Text(
+                        //       "Forgot Password?",style: TextStyle(color: whiteColor),
+                        //     ),
+                        //   )],
+                        // ),
                         (loadScreen)
                             ? const Center(
                           child: CircularProgressIndicator(),
