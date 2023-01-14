@@ -55,4 +55,9 @@ class CategoryProvider extends ChangeNotifier{
     }
     notifyListeners();
   }
+  void disposeValues() {
+    categoryFetchStatus=CategoryFetchStatus.nil;
+    selectedCategory=null;
+    categoryList=[];
+  }
 }

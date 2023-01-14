@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:strike_task/constants/global_context.dart';
 import 'package:strike_task/providers/user_provider.dart';
+import 'package:strike_task/view/uitls/all_controller.dart';
 
 import '../../controller/screen_controller.dart';
 class AuthService{
@@ -60,6 +61,7 @@ class AuthService{
     return "valid";
   }
   Future<void> signOut() async {
+    AppProviders.disposeAllProviders(context);
     await _auth.signOut();
   }
 }

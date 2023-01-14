@@ -100,13 +100,13 @@ class ProfileScreen extends StatelessWidget {
                                     Navigator.pop(context);
                                   },
                                 ),
-                                ListTile(
+                                user.currentUser!.cp!=null?ListTile(
                                   title: Text("Remove"),
                                   onTap: ()async{
                                     await user.removeCp();
                                     Navigator.pop(context);
                                   },
-                                ),
+                                ):const SizedBox(),
 
                               ],
                             ),
@@ -197,13 +197,13 @@ class ProfileScreen extends StatelessWidget {
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  ListTile(
+                                  user.currentUser!.dp!=null?ListTile(
                                     title: Text("Remove"),
                                     onTap: ()async{
                                       await user.removeDp();
                                       Navigator.pop(context);
                                     },
-                                  ),
+                                  ):const SizedBox(),
 
                                 ],
                               ),
