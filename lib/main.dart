@@ -1,11 +1,14 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:connection_notifier/connection_notifier.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_connection_checker/simple_connection_checker.dart';
 import 'package:strike_task/constants/constants.dart';
+import 'package:strike_task/controller/connection_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/controller/dateTime_controller.dart';
@@ -82,6 +85,7 @@ class _StrikeTaskState extends State<StrikeTask> {
             create: (context) => UserProvider(),
             update: (context, taskProvider, user) => user!..update(taskProvider.dueDateTaskMap),
         ),
+        ChangeNotifierProvider(create: (context) => ConnectionController(),)
       ],
       child: MaterialApp(
         routes: {
@@ -106,7 +110,14 @@ class _StrikeTaskState extends State<StrikeTask> {
             if(snapshot.connectionState==ConnectionState.active||snapshot.connectionState==ConnectionState.done){
               if(snapshot.hasData){
                 if(snapshot.data!) {
-                  return BodyWithAppBar();
+                  return StreamBuilder(
+                    stream: SimpleConnectionChecker().onConnectionChange,
+                    builder: (context, AsyncSnapshot<bool>snapshot){
+                    if(snapshot.hasData){
+                      Provider.of<ConnectionController>(context).connection=snapshot.data!;
+                    }
+                    return BodyWithAppBar();
+                  },);
                 }
                 else return LoginScreen();
               } else return LoginScreen();

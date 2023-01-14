@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:strike_task/constants/check_date.dart';
 import 'package:strike_task/constants/constants.dart';
 import 'package:strike_task/constants/device_size.dart';
+import 'package:strike_task/controller/connection_controller.dart';
 import 'package:strike_task/model/task_model.dart';
 import 'package:strike_task/providers/category_provider.dart';
 import 'package:strike_task/providers/task_provider.dart';
@@ -75,9 +76,8 @@ class CategoryCard extends StatelessWidget {
                   Container(
                     height: 16,
                     width: 20,
-                    child: PopupMenuButton<MenuItemModel>(
+                    child:Provider.of<ConnectionController>(context).connection==true? PopupMenuButton<MenuItemModel>(
                       onSelected: (value) {
-                        print("hii");
                       },
                       padding: EdgeInsets.zero,
                         icon: Icon(Icons.more_vert,size: 18,color: whiteColor,),
@@ -110,7 +110,7 @@ class CategoryCard extends StatelessWidget {
                         //       },
                         //       child: Row(children: [e.icon!,e.text!],)))
                         // ]),
-                    )
+                    ):null
                   )
                 ],
               ),

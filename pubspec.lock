@@ -569,6 +569,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  simple_connection_checker:
+    dependency: "direct main"
+    description:
+      name: simple_connection_checker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   simple_gesture_detector:
     dependency: transitive
     description:
