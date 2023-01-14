@@ -1,6 +1,8 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strike_task/constants/constants.dart';
@@ -32,7 +34,26 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // this is root of the app
-  runApp(StrikeTask());
+  runApp(MaterialApp(home: SplashScreen(),debugShowCheckedModeBanner: false,));
+}
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSplashScreen(
+      backgroundColor: Colors.black,
+        splash: Center(
+          child: SizedBox(
+              height: 300,
+              width: 240,
+              child: Image.asset('assets/images/strike_task.gif',fit: BoxFit.cover,)
+          ),
+        ),
+      duration: 1500,
+      nextScreen: StrikeTask(),
+    );
+  }
 }
 
 class StrikeTask extends StatefulWidget {
@@ -43,6 +64,10 @@ class StrikeTask extends StatefulWidget {
 class _StrikeTaskState extends State<StrikeTask> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ScreenController(),),
@@ -81,28 +106,11 @@ class _StrikeTaskState extends State<StrikeTask> {
             if(snapshot.connectionState==ConnectionState.active||snapshot.connectionState==ConnectionState.done){
               if(snapshot.hasData){
                 if(snapshot.data!) {
-                  if(user.getProfileStatus==ProfileStatus.nil)
-                  user.setUser(FirebaseAuth.instance.currentUser!.uid);
                   return BodyWithAppBar();
                 }
                 else return LoginScreen();
               } else return LoginScreen();
-            } else return Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/no_internet.png',width: displayWidth(context)*0.8,fit: BoxFit.contain),
-                  Text('OOPS! No Internet Connect!!..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                  SizedBox(height: 5,),
-                  Text('try after connecting to internet'),SizedBox(height: 15,),
-                  Center(child: CustomRoundRectButton(text: 'Try Again', height: 30,width: displayWidth(context)*0.35,
-                    callBack: () {
-                      setState(() {});
-                    },
-                  ),)
-                ],
-              ),
-            );
+            } else return SplashScreen();
           },
         ),
       ),

@@ -17,14 +17,14 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
-    final controller=Provider.of<TextFieldController>(context);
+    // final controller=Provider.of<TextFieldController>(context);
     return TextFormField(
       controller: widget.textController,
       validator: widget.validator,
       minLines: 1,
       maxLines: 16,
       decoration: InputDecoration(
-        fillColor: controller.bgColor,
+        // fillColor: controller.bgColor,
         labelText: widget.label??"Unnamed",
         labelStyle: TextStyle(fontWeight: FontWeight.w500,color: mutedTextColor ),
         // isCollapsed: true,

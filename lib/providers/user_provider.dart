@@ -102,6 +102,7 @@ class UserProvider extends ChangeNotifier {
       if (response != null) {
         currentUser = UserModel.fromJson(response);
         _profileStatus = ProfileStatus.fetched;
+        print("---------user fetched-----------");
         notifyListeners();
         return "successful";
       }
