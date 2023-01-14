@@ -21,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   TextEditingController password=TextEditingController();
   bool loadScreen = false;
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     AuthService _auth=AuthService(FirebaseAuth.instance,context);
@@ -49,45 +50,57 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Center(
-              child: Container(
-                width: displayWidth(context)*0.85,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // SizedBox(height: displayHeight(context)*0.2,),
-                      SizedBox(height: displayWidth(context)*0.09,),
-                      Text("Welcome Back",style: TextStyle(fontSize: 34,fontWeight: FontWeight.w500,color: whiteColor),),
-                      SizedBox(height: displayHeight(context)*0.03,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                        Text("Login with your account", style: TextStyle(color: whiteColor,fontSize: 14),),
-                          Text("   or   ", style: TextStyle(color: whiteColor,fontSize: 14),),
-                        InkWell(child: Text("skip", style: TextStyle(color: whiteColor,fontSize: 14,fontWeight: FontWeight.bold),),
-                        onTap: (){
-                          Navigator.pushReplacementNamed(context, '/HomeScreen');
-                        }),
-                      ],),
-                      SizedBox(height: displayHeight(context)*0.05,),
-                      GradientTextField(hintText: "Email",icon: Icon(Icons.email,color: primaryColor,),textController: email),
-                      SizedBox(height: 20,),
-                      GradientTextField(hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,),textController: password,obsureText: true,),
-                      SizedBox(height: 5,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          InkWell(
-                          child: Text(
-                            "Forgot Password?",style: TextStyle(color: whiteColor),
-                          ),
-                        )],
-                      ),
-                      (loadScreen)
-                          ? const Center(
-                        child: CircularProgressIndicator(),
-                      ):SizedBox(),
-                    ],
+              child: Form(
+                key: _formKey,
+                child: Container(
+                  width: displayWidth(context)*0.85,
+                  height: displayHeight(context)*0.56,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // SizedBox(height: displayHeight(context)*0.2,),
+                        SizedBox(height: displayWidth(context)*0.09,),
+                        Text("Welcome Back",style: TextStyle(fontSize: 34,fontWeight: FontWeight.w500,color: whiteColor),),
+                        SizedBox(height: displayHeight(context)*0.03,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Text("Login with your account", style: TextStyle(color: whiteColor,fontSize: 14),),
+                            Text("   or   ", style: TextStyle(color: whiteColor,fontSize: 14),),
+                          InkWell(child: Text("skip", style: TextStyle(color: whiteColor,fontSize: 14,fontWeight: FontWeight.bold),),
+                          onTap: (){
+                            Navigator.pushReplacementNamed(context, '/HomeScreen');
+                          }),
+                        ],),
+                        SizedBox(height: displayHeight(context)*0.05,),
+                        GradientTextField(
+                            validator: (value) {
+                          if(value!.isEmpty) return "cannot be empty";
+                        },
+                            hintText: "Email",icon: Icon(Icons.email,color: primaryColor,),textController: email),
+                        SizedBox(height: 20,),
+                        GradientTextField(
+                          validator: (value) {
+                            if(value!.isEmpty) return "cannot be empty";
+                          },
+                          hintText: "Password",icon: Icon(Icons.lock,color: primaryColor,),textController: password,obsureText: true,),
+                        SizedBox(height: 5,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                            child: Text(
+                              "Forgot Password?",style: TextStyle(color: whiteColor),
+                            ),
+                          )],
+                        ),
+                        (loadScreen)
+                            ? const Center(
+                          child: CircularProgressIndicator(),
+                        ):SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -103,23 +116,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   setState(() {
                     loadScreen=true;
                   });
-                  var response=await _auth.signIn(email: email.text, password: password.text);
-                  if(response=="valid") {
-                    String? res=await userProvider.setUser(_auth.getAuth().currentUser!.uid);
-                    if(res=="successful"){
-                      await setPref(true);
-                      Navigator.pushReplacementNamed(context, "/HomeScreen");
-                    } else if(res=="unsuccessful"){
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("check connection!!try again")));
+                  if(_formKey.currentState!.validate()==true){
+                    var response=await _auth.signIn(email: email.text, password: password.text);
+                    if(response=="valid") {
+                      String? res=await userProvider.setUser(_auth.getAuth().currentUser!.uid);
+                      if(res=="successful"){
+                        await setPref(true);
+                        Navigator.pushReplacementNamed(context, "/HomeScreen");
+                      } else if(res=="unsuccessful"){
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("check connection!!try again")));
+                      }else{
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res!)));
+                      }
                     }else{
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(res!)));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("invalid")));
                     }
-                  }else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("invalid")));
-                    setState(() {
-                      loadScreen=false;
-                    });
                   }
+                  setState(() {
+                    loadScreen=false;
+                  });
                 },
                 fontSize: 16,
                 text: "Login",

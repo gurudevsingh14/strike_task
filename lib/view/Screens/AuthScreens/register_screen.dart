@@ -10,6 +10,7 @@ import 'package:strike_task/services/auth_services/auth_service.dart';
 import 'package:strike_task/view/Common/custom_round_rect_button.dart';
 import 'package:strike_task/view/Screens/AuthScreens/components/gradientTextField.dart';
 import 'package:strike_task/model/user_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../constants/constants.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -25,6 +26,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   bool loadScreen = false;
+  final Uri _url = Uri.parse('https://doc-hosting.flycricket.io/strike-task-terms-of-use/81b101c9-6937-49d7-9e66-7fd64737d3a3/terms');
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+  final _formKey = GlobalKey<FormState>();
+  bool acceptedTc=false;
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -57,85 +66,124 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             Center(
-              child: Container(
-                width: displayWidth(context) * 0.85,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // SizedBox(height: displayHeight(context)*0.2,),
-                      SizedBox(
-                        height: displayWidth(context) * 0.09,
-                      ),
-                      Text(
-                        "Register",
-                        style: TextStyle(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w500,
-                            color: whiteColor),
-                      ),
-                      SizedBox(
-                        height: displayHeight(context) * 0.02,
-                      ),
-                      Text(
-                        "Create your account",
-                        style: TextStyle(color: whiteColor, fontSize: 14),
-                      ),
-                      SizedBox(
-                        height: displayHeight(context) * 0.03,
-                      ),
-                      // SizedBox(height: 20,),
-                      GradientTextField(
-                          hintText: "Name",
+              child: Form(
+                key: _formKey,
+                child: Container(
+                  width: displayWidth(context) * 0.85,
+                  height: displayHeight(context)*0.56,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        // SizedBox(height: displayHeight(context)*0.2,),
+                        SizedBox(
+                          height: displayWidth(context) * 0.09,
+                        ),
+                        Text(
+                          "Register",
+                          style: TextStyle(
+                              fontSize: 34,
+                              fontWeight: FontWeight.w500,
+                              color: whiteColor),
+                        ),
+                        SizedBox(
+                          height: displayHeight(context) * 0.02,
+                        ),
+                        Text(
+                          "Create your account",
+                          style: TextStyle(color: whiteColor, fontSize: 14),
+                        ),
+                        SizedBox(
+                          height: displayHeight(context) * 0.03,
+                        ),
+                        // SizedBox(height: 20,),
+                        GradientTextField(
+                            validator: (value) {
+                              if(value!.isEmpty) return "cannot be empty";
+                            },
+                            hintText: "Name",
+                            icon: Icon(
+                              Icons.person,
+                              color: primaryColor,
+                            ),
+                            textController: name),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GradientTextField(
+                          validator: (value) {
+                            if(value!.isEmpty) return "cannot be empty";
+                          },
+                          hintText: "Email",
                           icon: Icon(
-                            Icons.person,
+                            Icons.email,
                             color: primaryColor,
                           ),
-                          textController: name),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GradientTextField(
-                        hintText: "Email",
-                        icon: Icon(
-                          Icons.email,
-                          color: primaryColor,
+                          textController: email,
                         ),
-                        textController: email,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GradientTextField(
-                        hintText: "Password",
-                        icon: Icon(
-                          Icons.lock,
-                          color: primaryColor,
+                        SizedBox(
+                          height: 20,
                         ),
-                        obsureText: true,
-                        textController: password,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      GradientTextField(
-                        hintText: "Confirm Password",
-                        icon: Icon(
-                          Icons.lock,
-                          color: primaryColor,
+                        GradientTextField(
+                          validator: (value) {
+                            if(value!.isEmpty) return "cannot be empty";
+                          },
+                          hintText: "Password",
+                          icon: Icon(
+                            Icons.lock,
+                            color: primaryColor,
+                          ),
+                          obsureText: true,
+                          textController: password,
                         ),
-                        obsureText: true,
-                        textController: confirmPassword,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      (loadScreen)
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : SizedBox(),
-                    ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GradientTextField(
+                          validator: (value) {
+                            if(value!.isEmpty) return "cannot be empty";
+                          },
+                          hintText: "Confirm Password",
+                          icon: Icon(
+                            Icons.lock,
+                            color: primaryColor,
+                          ),
+                          obsureText: true,
+                          textController: confirmPassword,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Theme(
+                              data: ThemeData(
+                                primarySwatch: Colors.teal,
+                                unselectedWidgetColor: Colors.white, // Your color
+                              ),
+                              child: Checkbox(
+                                value: acceptedTc,
+                                onChanged: (value) {
+                                  acceptedTc=value!;
+                                  setState(() {});
+                                },
+                              ),
+                            ),
+                            Text("I accept the",style: TextStyle(color: Colors.white)),
+                            TextButton(onPressed:() => _launchUrl(), child: Text("Terms and conditions",style: TextStyle(color: primayLightColor,fontWeight: FontWeight.bold),))
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        (loadScreen)
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : SizedBox(),
+                        SizedBox(height: 50,)
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -151,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   setState(() {
                     loadScreen = true;
                   });
-                  if (password.text == confirmPassword.text) {
+                  if (_formKey.currentState!.validate()==true&&password.text == confirmPassword.text&&acceptedTc==true) {
                     String? response = await _auth.signUp(
                         name: name.text,
                         email: email.text,
@@ -175,9 +223,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text("Something went wrong! try again..")));
                     }
-                  } else {
+                  } else if(password.text != confirmPassword.text){
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("password did not matched")));
+                  }else if(acceptedTc==false){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("accept terms and conditions")));
                   }
                   setState(() {
                     loadScreen = false;
